@@ -1,114 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:varejo_mais/MenuButtons.dart';
+import 'package:varejo_mais/components/home_page_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Material(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(mainAxisAlignment: MainAxisAlignment.start,
               children: [
+            Image.asset('assets/images/logo.png'),
 
-                ElevatedButton(
-                  onPressed: _handleButtonPress,
-                  // style: ButtonStyle(
-                  //   backgroundColor: MaterialStateProperty.resolveWith<Color?>
-                  //     ((states) {
-                  //       return Colors.red;
-                  //   })
-                  // ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.wallet_outlined), // Ícone a ser exibido
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o rótulo (opcional)
-                      Text('Venda'),
-                    ],
-                  ),
-                ),
+                HomeButton(
+                  onPressed: () {},
+                  icon: Icons.wallet_outlined,
+                  label: "Venda"),
 
-                ElevatedButton(
-                  onPressed: _handleButtonPress,
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
 
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.local_print_shop_outlined), // Ícone a ser exibido
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o rótulo (opcional)
-                      Text('Reimpressão'),
-                    ],
-                  ),
-                ),
+                HomeButton(
+                  onPressed: () {},
+                  icon: Icons.local_print_shop_outlined,
+                  label: "Reimpressao"),
 
-                ElevatedButton(
-                  onPressed: _handleButtonPress,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.cancel_outlined), // Ícone a ser exibido
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o rótulo (opcional)
-                      Text("Cancelamento"),
-                    ],
-                  ),
-                ),
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
+                HomeButton(
+                  onPressed: () {},
+                  icon: Icons.cancel_outlined,
+                  label: "Cancelamento"),
 
-                ElevatedButton(
-                  onPressed: _handleButtonPress,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.trolley), // Ícone a ser exibido
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o rótulo (opcional)
-                      Text("Estoque"),
-                    ],
-                  ),
-                ),
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
 
-                ElevatedButton(
-                  onPressed: _handleButtonPress,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.content_paste), // Ícone a ser exibido
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o rótulo (opcional)
-                      Text("Coletor"),
-                    ],
-                  ),
-                ),
+                 HomeButton(
+                     onPressed: () {},
+                     icon: Icons.trolley,
+                     label: "Estoque"
+                 ),
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
 
-                ElevatedButton(
-                  onPressed: _handleButtonPress,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.delivery_dining_outlined), // Ícone a ser exibido
-                      SizedBox(width: 8), // Espaçamento entre o ícone e o rótulo (opcional)
-                      Text("Delivery"),
-                    ],
-                  ),
-                ),
-              ]
-          ),
+              HomeButton(
+                  onPressed: () {}, icon: Icons.content_paste, label: "Coletor"),
+
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
+                HomeButton(
+                  onPressed: () {},
+                  icon: Icons.delivery_dining_outlined,
+                  label: "Delivery"),
+
+            // const MyButton()
+          ]),
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         tooltip: 'settings',
-        shape: RoundedRectangleBorder(),
-
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
         backgroundColor: Color.fromRGBO(255, 255, 255, 1.0),
         foregroundColor: Color.fromRGBO(33, 133, 175, 1.0),
-        child: Icon(Icons.settings),
         onPressed: _handleButtonPress,
+        child: Icon(Icons.settings),
       ),
     );
   }
 }
+
 void _handleButtonPress() {
-   print("clicou");
+  print("clicou");
 }
-const height = 48;
