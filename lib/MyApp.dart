@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:varejo_mais/HomeController.dart';
-import 'package:varejo_mais/HomePage.dart';
+import 'package:varejoMais/HomeController.dart';
+import 'package:varejoMais/HomePage.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -9,9 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: "Varejo+",
-      home: SafeArea(
-          child: HomePage()
-      ),
+      home: SafeArea(child: HomePage()),
     );
   }
 }

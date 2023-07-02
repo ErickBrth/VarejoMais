@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:varejo_mais/MenuButtons.dart';
-import 'package:varejo_mais/components/home_page_button.dart';
+import 'package:varejoMais/components/home_page_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,12 +18,13 @@ class HomePage extends StatelessWidget {
                   icon: Icons.wallet_outlined,
                   label: "Venda"),
 
+
             const Padding(padding: EdgeInsets.only(bottom: 15)),
 
                 HomeButton(
                   onPressed: () {},
                   icon: Icons.local_print_shop_outlined,
-                  label: "Reimpressao"),
+                  label: "Reimpressão"),
 
             const Padding(padding: EdgeInsets.only(bottom: 15)),
                 HomeButton(
@@ -42,18 +42,19 @@ class HomePage extends StatelessWidget {
             const Padding(padding: EdgeInsets.only(bottom: 15)),
 
               HomeButton(
-                  onPressed: () {}, icon: Icons.content_paste, label: "Coletor"),
+                  onPressed: () {},
+                  icon: Icons.content_paste,
+                  label: "Coletor"),
 
             const Padding(padding: EdgeInsets.only(bottom: 15)),
                 HomeButton(
                   onPressed: () {},
                   icon: Icons.delivery_dining_outlined,
                   label: "Delivery"),
-
-            // const MyButton()
           ]),
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         tooltip: 'settings',
         shape: RoundedRectangleBorder(
