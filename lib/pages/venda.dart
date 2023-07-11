@@ -10,9 +10,10 @@ class Venda extends StatefulWidget {
 }
 
 class _VendaState extends State<Venda> {
-  var exemplePlatformChannel = ExemplePlatformChannel();
+  var platformChannel = PlatformChannel();
   String _result = "";
   int result = 0;
+  String creditoParcelado = "";
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +23,56 @@ class _VendaState extends State<Venda> {
           child: Center(
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Image.asset('assets/images/logo.png'),
-            HomeButton(
-                onPressed: () async {
-                  _result =
-                      await exemplePlatformChannel.callSimpleMethodChannel();
-                  result =
-                  await exemplePlatformChannel.getLongAmount();
-                  setState(() {});
-                },
-                icon: Icons.wallet_outlined,
-                label: "Cartão de Crédito"),
-                    Text(
-                      'Method Channel Result: $result',
-                    ),
-            Text(
-              _result,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+                    Image.asset('assets/images/logo.png'),
+                      HomeButton(
+                        onPressed: () async {
+                              await platformChannel.creditoParceladoEmissor();
+                          setState(() {});
+                        },
+                        icon: Icons.wallet_outlined,
+                        label: "Cartão de Crédito"),
+
+                            // Text(
+                            //   'Method Channel Result: $result',
+                            // ),
+                        // Text(
+                        //   creditoParcelado,
+                        //   style: Theme.of(context).textTheme.headlineMedium,
+                        // ),
+                    const Padding(padding: EdgeInsets.only(bottom: 15)),
+
+                      HomeButton(
+                        onPressed: () async {
+                          await platformChannel.reprint();
+                          setState(() {});
+                        },
+                        icon: Icons.wallet_outlined,
+                        label: "Reimpressao"),
+                        // Text(
+                        //     'Method Channel Result: $result',
+                        // ),
+                        // Text(
+                        //   _result,
+                        //   style: Theme.of(context).textTheme.headlineMedium,
+                        // ),
+                    const Padding(padding: EdgeInsets.only(bottom: 15)),
+                    // HomeButton(
+                    //     onPressed: () async {
+                    //       _result =
+                    //       await platformChannel.callSimpleMethodChannel();
+                    //       result =
+                    //       await platformChannel.getLongAmount();
+                    //       setState(() {});
+                    //     },
+                    //     icon: Icons.wallet_outlined,
+                    //     label: "Method Channel"),
+                    // Text(
+                    //   'Method Channel Result: $result',
+                    // ),
+                    // Text(
+                    //   _result,
+                    //   style: Theme.of(context).textTheme.headlineMedium,
+                    // ),
           ])),
         ),
       ),
