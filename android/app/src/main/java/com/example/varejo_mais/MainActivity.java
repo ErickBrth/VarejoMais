@@ -55,10 +55,16 @@ public class MainActivity extends FlutterActivity {
 
     private final String CHANNEL = "unique.identifier.method/hello";
     private final String CHANNEL1 = "unique.identifier.method/getLongAmount";
-    private final String CREDIT_CARD = "unique.identifier.method/creditoParcelado";
+//    private final String CREDIT_CARD = "unique.identifier.method/creditoParcelado";
 
     private final String REPRINT = "unique.identifier.method/reprint";
     private final String CREDITO_PARCELADO_EMISSOR = "unique.identifier.method/creditoParceladoEmissor";
+    private final String CREDITO_A_VISTA = "unique.identifier.method/creditoVista";
+    private final String CARTAO_DEBITO = "unique.identifier.method/debito";
+    private final String VOUCHER = "unique.identifier.method/voucher";
+    private final String REVERSAL = "unique.identifier.method/estorno";
+
+
 
     private TextView PVNumberText;
 
@@ -66,24 +72,24 @@ public class MainActivity extends FlutterActivity {
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
 
-        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL);
-        methodChannel.setMethodCallHandler((call, result) -> {
-            if (call.method.equals("getHelloWorld")) {
-                result.success("Hello World");
-            } else {
-                result.notImplemented();
-            }
-        });
-
-        MethodChannel methodChannel2 = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL1);
-        methodChannel2.setMethodCallHandler((call, result) -> {
-            if (call.method.equals("getLongAmount")) {
-                result.success(getLongAmount());
-            }else{
-                result.notImplemented();
-            }
-
-        });
+//        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL);
+//        methodChannel.setMethodCallHandler((call, result) -> {
+//            if (call.method.equals("getHelloWorld")) {
+//                result.success("Hello World");
+//            } else {
+//                result.notImplemented();
+//            }
+//        });
+//
+//        MethodChannel methodChannel2 = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL1);
+//        methodChannel2.setMethodCallHandler((call, result) -> {
+//            if (call.method.equals("getLongAmount")) {
+//                result.success(getLongAmount());
+//            }else{
+//                result.notImplemented();
+//            }
+//
+//        });
 //        MethodChannel creditoParcelado = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CREDIT_CARD);
 //        creditoParcelado.setMethodCallHandler((call, result) -> {
 //
@@ -114,7 +120,46 @@ public class MainActivity extends FlutterActivity {
             }else{
                 result.notImplemented();
             }
+        });
 
+        MethodChannel creditoVista = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CREDITO_A_VISTA);
+        creditoVista.setMethodCallHandler((call, result) -> {
+
+            if(call.method.equals("creditoVista")){
+                result.success(creditoVista());
+            }else{
+                result.notImplemented();
+            }
+        });
+
+        MethodChannel debito = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CARTAO_DEBITO);
+        debito.setMethodCallHandler((call, result) -> {
+
+            if(call.method.equals("debito")){
+                result.success(debito());
+            }else{
+                result.notImplemented();
+            }
+        });
+
+        MethodChannel voucher = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), VOUCHER);
+        voucher.setMethodCallHandler((call, result) -> {
+
+            if(call.method.equals("voucher")){
+                result.success(voucher());
+            }else{
+                result.notImplemented();
+            }
+        });
+
+        MethodChannel estorno = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), REVERSAL);
+        estorno.setMethodCallHandler((call, result) -> {
+
+            if(call.method.equals("estorno")){
+                result.success(estorno());
+            }else{
+                result.notImplemented();
+            }
         });
 
     }
@@ -134,6 +179,26 @@ public class MainActivity extends FlutterActivity {
 
     public String creditoParceladoEmissor(){
         openPaymentFragmentCreditoEmissor();
+        return "ok!";
+    }
+
+    public String creditoVista(){
+        openPaymentFragmentCreditoVista();
+        return "ok!";
+    }
+
+    public String debito(){
+        openPaymentDebit();
+        return "ok!";
+    }
+
+    public String voucher(){
+        openPaymentVoucher();
+        return "ok!";
+    }
+
+    public String estorno(){
+        onReversal();
         return "ok!";
     }
 

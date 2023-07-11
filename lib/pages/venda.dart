@@ -23,56 +23,79 @@ class _VendaState extends State<Venda> {
           child: Center(
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Image.asset('assets/images/logo.png'),
-                      HomeButton(
-                        onPressed: () async {
-                              await platformChannel.creditoParceladoEmissor();
-                          setState(() {});
-                        },
-                        icon: Icons.wallet_outlined,
-                        label: "Cartão de Crédito"),
+            Image.asset('assets/images/logo.png'),
+            HomeButton(
+                onPressed: () async {
+                  await platformChannel.creditoParceladoEmissor();
+                  setState(() {});
+                },
+                icon: Icons.wallet_outlined,
+                label: "Crédito Parcelado"),
 
-                            // Text(
-                            //   'Method Channel Result: $result',
-                            // ),
-                        // Text(
-                        //   creditoParcelado,
-                        //   style: Theme.of(context).textTheme.headlineMedium,
-                        // ),
-                    const Padding(padding: EdgeInsets.only(bottom: 15)),
+            // Text(
+            //   'Method Channel Result: $result',
+            // ),
+            // Text(
+            //   creditoParcelado,
+            //   style: Theme.of(context).textTheme.headlineMedium,
+            // ),
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
 
-                      HomeButton(
-                        onPressed: () async {
-                          await platformChannel.reprint();
-                          setState(() {});
-                        },
-                        icon: Icons.wallet_outlined,
-                        label: "Reimpressao"),
-                        // Text(
-                        //     'Method Channel Result: $result',
-                        // ),
-                        // Text(
-                        //   _result,
-                        //   style: Theme.of(context).textTheme.headlineMedium,
-                        // ),
-                    const Padding(padding: EdgeInsets.only(bottom: 15)),
-                    // HomeButton(
-                    //     onPressed: () async {
-                    //       _result =
-                    //       await platformChannel.callSimpleMethodChannel();
-                    //       result =
-                    //       await platformChannel.getLongAmount();
-                    //       setState(() {});
-                    //     },
-                    //     icon: Icons.wallet_outlined,
-                    //     label: "Method Channel"),
-                    // Text(
-                    //   'Method Channel Result: $result',
-                    // ),
-                    // Text(
-                    //   _result,
-                    //   style: Theme.of(context).textTheme.headlineMedium,
-                    // ),
+            HomeButton(
+                onPressed: () async {
+                  await platformChannel.creditoVista();
+                  setState(() {});
+                },
+                icon: Icons.wallet_outlined,
+                label: "Crédito à Vista"),
+
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
+
+            HomeButton(
+                onPressed: () async {
+                  await platformChannel.debito();
+                  setState(() {});
+                },
+                icon: Icons.wallet_outlined,
+                label: "Débito"),
+
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
+
+            HomeButton(
+                onPressed: () async {
+                  await platformChannel.voucher();
+                  setState(() {});
+                },
+                icon: Icons.wallet_outlined,
+                label: "Voucher"),
+
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
+
+            HomeButton(
+                onPressed: () async {
+                  await platformChannel.estorno();
+                  setState(() {});
+                },
+                icon: Icons.wallet_outlined,
+                label: "Estorno"),
+
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
+
+            HomeButton(
+                onPressed: () async {
+                  await platformChannel.reprint();
+                  setState(() {});
+                },
+                icon: Icons.local_print_shop_outlined,
+                label: "Relatório de Vendas"),
+            // Text(
+            //     'Method Channel Result: $result',
+            // ),
+            // Text(
+            //   _result,
+            //   style: Theme.of(context).textTheme.headlineMedium,
+            // ),
+            const Padding(padding: EdgeInsets.only(bottom: 15)),
           ])),
         ),
       ),
