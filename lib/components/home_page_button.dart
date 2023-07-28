@@ -14,38 +14,52 @@ class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      ElevatedButton.icon(
+      ElevatedButton(
+
         onPressed: onPressed,
-        icon: Icon(icon, size: 40),
+
         style: ButtonStyle(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           padding: MaterialStateProperty.all<EdgeInsets>(
-            EdgeInsets.symmetric(horizontal: 16),
+            const EdgeInsets.symmetric(horizontal: 10),
           ),
           textStyle: MaterialStateProperty.all<TextStyle>(
-            const TextStyle(fontSize: 30,
+            const TextStyle(fontSize: 22,
             fontFamily: "Arista-Pro-Bold-trial",
             ),
+
           ),
           elevation: MaterialStateProperty.all(10),
 
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(18),
+
             ),
+
           ),
           backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
           iconColor: MaterialStateProperty.all<Color>(
             const Color.fromRGBO(248, 67, 21, 1.0),
           ),
+
           shadowColor: MaterialStateProperty.all<Color>(Colors.black),
-          // maximumSize: MaterialStateProperty.all<Size>(const Size(370, 70)),
-          minimumSize: MaterialStateProperty.all<Size>(const Size(340, 65)),
+          maximumSize: MaterialStateProperty.all<Size>(const Size(200, 110)),
+          minimumSize: MaterialStateProperty.all<Size>(const Size(160, 110)),
 
 
         ),
-        label: Text(label),
+
+        child: Column(
+          children: [
+            Icon(icon, size: 70,), // Ícone
+            const SizedBox(height: 10), // Espaçamento entre o ícone e o texto
+            Text(label), // Texto
+          ],
+        ),
+
+
     );
   }
 }

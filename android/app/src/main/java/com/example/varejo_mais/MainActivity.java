@@ -72,35 +72,6 @@ public class MainActivity extends FlutterActivity {
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
 
-//        MethodChannel methodChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL);
-//        methodChannel.setMethodCallHandler((call, result) -> {
-//            if (call.method.equals("getHelloWorld")) {
-//                result.success("Hello World");
-//            } else {
-//                result.notImplemented();
-//            }
-//        });
-//
-//        MethodChannel methodChannel2 = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL1);
-//        methodChannel2.setMethodCallHandler((call, result) -> {
-//            if (call.method.equals("getLongAmount")) {
-//                result.success(getLongAmount());
-//            }else{
-//                result.notImplemented();
-//            }
-//
-//        });
-//        MethodChannel creditoParcelado = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CREDIT_CARD);
-//        creditoParcelado.setMethodCallHandler((call, result) -> {
-//
-//            if(call.method.equals("creditoParcelado")){
-//                result.success(creditoParcelado());
-//            }else{
-//                result.notImplemented();
-//            }
-//
-//        });
-
         MethodChannel reprint = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), REPRINT);
         reprint.setMethodCallHandler((call, result) -> {
 
@@ -168,14 +139,6 @@ public class MainActivity extends FlutterActivity {
         return "printa";
     }
 
-//    public String creditoParcelado(){ // credito Parcelado com qrCode e venda sem cartao
-//        openPaymentFragment();
-////        Intent data = new Intent();
-//        Receipt receipt = new Receipt();
-//        //onActivityResult( 1,  1, data);
-//        //  "\n"+"resultado: " + result;
-//        return showReceipt(receipt);
-//    }
 
     public String creditoParceladoEmissor(){
         openPaymentFragmentCreditoEmissor();
@@ -216,20 +179,21 @@ public class MainActivity extends FlutterActivity {
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         redePayments = RedePayments.getInstance(this);
 
-        //setContentView(R.layout.activity_main);
+
         setTitle(getString(R.string.app_name) + " v" + BuildConfig.VERSION_NAME);
         GeneratedPluginRegistrant.registerWith(new FlutterEngine(this));
-        //PVNumberText = findViewById(R.id.PVNumberText);
+
 
     }
 
-//    public void openPaymentFragment() { not recomended
+    //crédito parcelado sem juros
+
+//    public void openPaymentFragment() {
 //        hideReceipt();
 //        try {
 //            Intent collectPaymentIntent = redePayments
@@ -246,6 +210,7 @@ public class MainActivity extends FlutterActivity {
 //        }
 //    }
 
+    //crédito parcelado com juros
     public void openPaymentFragmentCreditoEmissor() {
         hideReceipt();
         try {
@@ -340,7 +305,6 @@ public class MainActivity extends FlutterActivity {
         registerReceiver(mBroadcastReceiver, new IntentFilter("br.com.mobilerede.GetPVNumber"));
     }
 
-
     @Override
     public void onPause(){
         super.onPause();
@@ -411,8 +375,6 @@ public class MainActivity extends FlutterActivity {
                 break;
         }
     }
-
-
 
     private @NonNull String getPaymentStatus(@Nullable Intent intent) {
         String result = "Sem objeto Payment";

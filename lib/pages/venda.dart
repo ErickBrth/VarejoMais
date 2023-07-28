@@ -11,9 +11,6 @@ class Venda extends StatefulWidget {
 
 class _VendaState extends State<Venda> {
   var platformChannel = PlatformChannel();
-  String _result = "";
-  int result = 0;
-  String creditoParcelado = "";
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +29,11 @@ class _VendaState extends State<Venda> {
                 icon: Icons.wallet_outlined,
                 label: "Crédito Parcelado"),
 
-            // Text(
-            //   'Method Channel Result: $result',
-            // ),
-            // Text(
-            //   creditoParcelado,
-            //   style: Theme.of(context).textTheme.headlineMedium,
-            // ),
             const Padding(padding: EdgeInsets.only(bottom: 15)),
 
             HomeButton(
                 onPressed: () async {
                   await platformChannel.creditoVista();
-                  setState(() {});
                 },
                 icon: Icons.wallet_outlined,
                 label: "Crédito à Vista"),
@@ -54,7 +43,6 @@ class _VendaState extends State<Venda> {
             HomeButton(
                 onPressed: () async {
                   await platformChannel.debito();
-                  setState(() {});
                 },
                 icon: Icons.wallet_outlined,
                 label: "Débito"),
@@ -64,7 +52,6 @@ class _VendaState extends State<Venda> {
             HomeButton(
                 onPressed: () async {
                   await platformChannel.voucher();
-                  setState(() {});
                 },
                 icon: Icons.wallet_outlined,
                 label: "Voucher"),
@@ -74,7 +61,6 @@ class _VendaState extends State<Venda> {
             HomeButton(
                 onPressed: () async {
                   await platformChannel.estorno();
-                  setState(() {});
                 },
                 icon: Icons.wallet_outlined,
                 label: "Estorno"),
@@ -84,7 +70,6 @@ class _VendaState extends State<Venda> {
             HomeButton(
                 onPressed: () async {
                   await platformChannel.reprint();
-                  setState(() {});
                 },
                 icon: Icons.local_print_shop_outlined,
                 label: "Relatório de Vendas"),
