@@ -93,8 +93,8 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(
-                        width: 205,
-                        height: 52,
+                        width: 121,
+                        height: 30,
                         child: Image.asset('assets/images/DataPayLogo.png')
                     ),
                     const Padding(padding: EdgeInsets.only(bottom: 50)),
