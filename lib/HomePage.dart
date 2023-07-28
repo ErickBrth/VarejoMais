@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
                         height: 52,
                         child: Image.asset('assets/images/DataPayLogo.png')
                     ),
-                    const Padding(padding: EdgeInsets.only(bottom: 40)),
+                    const Padding(padding: EdgeInsets.only(bottom: 50)),
                   ],
                 )
             ]),
