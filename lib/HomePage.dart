@@ -15,13 +15,9 @@ class HomePage extends StatelessWidget {
           child: Center(
             child: Stack(
               children: [
-                Column(
+                Column(crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                  SizedBox(
-                    width: 420,
-                      height: 170,
-                      child: Image.asset('assets/images/logo.png')
-                  ),
+                      Image.asset('assets/images/logo.png', width: 297, height: 120,)
                 ]),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -92,11 +88,7 @@ class HomePage extends StatelessWidget {
                 Column( mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    SizedBox(
-                        width: 121,
-                        height: 30,
-                        child: Image.asset('assets/images/DataPayLogo.png')
-                    ),
+                    Image.asset('assets/images/DataPayLogo.png',width: 121, height: 30,),
                     const Padding(padding: EdgeInsets.only(bottom: 50)),
                   ],
                 )
