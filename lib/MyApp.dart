@@ -4,7 +4,7 @@ import 'package:varejoMais/pages/Cancelamento.dart';
 import 'package:varejoMais/pages/coletor.dart';
 import 'package:varejoMais/pages/estoque.dart';
 import 'package:varejoMais/pages/reimpressao.dart';
-import 'package:varejoMais/pages/venda.dart';
+import 'package:varejoMais/pages/Venda/venda.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Varejo+",
       initialRoute: '/',
+      debugShowCheckedModeBanner: false, //shows debug banner
       routes: {
         '/': (context) => HomePage(),
-        '/venda': (context) => const Venda(),
+        '/venda': (context) => Venda(),
         '/reimpressao': (context) => const Reimpressao(),
         '/cancelamento': (context) => const Cancelamento(),
         '/estoque': (context) => const Estoque(),
