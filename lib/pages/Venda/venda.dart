@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:varejoMais/components/home_page_button.dart';
-import 'package:varejoMais/pages/Venda/appBar.dart';
+import 'package:varejoMais/pages/Venda/vendaPage.dart';
 
 import 'package:varejoMais/platform_channel/platform_channel.dart';
 
@@ -12,8 +12,10 @@ class Venda extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: AppBarStatic(
-      ),
+                child: Material(
+                            child: VendaPage(
+                            ),
+                ),
     );
   }
 }
