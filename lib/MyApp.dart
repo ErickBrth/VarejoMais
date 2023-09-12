@@ -5,6 +5,7 @@ import 'package:varejoMais/pages/coletor.dart';
 import 'package:varejoMais/pages/estoque.dart';
 import 'package:varejoMais/pages/reimpressao.dart';
 import 'package:varejoMais/pages/Venda/venda.dart';
+import 'package:varejoMais/pages/Login/LoginPage.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -16,12 +17,14 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       debugShowCheckedModeBanner: false, //shows debug banner
       routes: {
-        '/': (context) => HomePage(),
+        '/': (context) => LoginPage(),
+        '/home': (context) => HomePage(),
         '/venda': (context) => Venda(),
         '/reimpressao': (context) => const Reimpressao(),
         '/cancelamento': (context) => const Cancelamento(),
         '/estoque': (context) => const Estoque(),
         '/coletor': (context) => const Coletor(),
+        //'/login': (context) => const LoginPage(),
       },
     );
   }

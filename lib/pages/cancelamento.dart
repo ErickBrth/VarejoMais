@@ -12,7 +12,7 @@ class Cancelamento extends StatelessWidget{
           child: Center(
               child: Column(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Image.asset('assets/images/logo.png'),
+                    Image.asset('assets/images/logo.png', width: 297, height: 120),
                     Text('Cancelamento'),
                   ]
               )
