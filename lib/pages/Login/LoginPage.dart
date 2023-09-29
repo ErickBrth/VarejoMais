@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,8 +14,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  // final _formKey = GlobalKey<FormState>();
+
   // final _scaffoldKey = GlobalKey<ScaffoldState>();
   //
   // bool _isLoading = false;
@@ -36,6 +37,18 @@ class _LoginPageState extends State<LoginPage> {
 
                       TextFormField(
                         controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (email){
+                          if(email == null || email.isEmpty){
+                            return "digite seu email";
+                          }else if(!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(emailController.text)) {
+                              return 'Por favor, digite um e-mail correto';
+
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: "Usuário",
@@ -44,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 10,),
                       TextFormField(
                         controller: passwordController,
+                        keyboardType: const TextInputType.numberWithOptions(),
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -59,7 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 15,),
                       ElevatedButton(
                           onPressed: () {
-                            login(emailController.text.toString(), passwordController.text.toString());
+                            // if(isUserLoggedIn()){
+                              login(emailController.text.toString(), passwordController.text.toString());
+                           // }
                           },
                           style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(248, 67, 21, 1.0))),
                           child: const Text("Entrar")),
@@ -68,23 +84,64 @@ class _LoginPageState extends State<LoginPage> {
               ),
             )
         ),
-    ),
+      ),
     );
   }
 
+  // Future<void> storeToken(String token) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('auth_token', token);
+  // }
+  //
+  //  getToken() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final token = prefs.getString('auth_token');
+  //   return token;
+  // }
+
+  Future<bool>verifyToken() async{
+    SharedPreferences token = await SharedPreferences.getInstance();;
+    if (token.getString('id') != null) {
+      return true;  // O usuário está logado.
+    } else {
+      return false; // O usuário não está logado.
+    }
+  }
+  
+  @override
+  void initState(){
+    super.initState();
+    verifyToken().then((value) {
+      if(value){
+        Navigator.of(context).pushReplacementNamed('/home');
+      }else{
+        print("usuario nao logado");
+      }
+    });
+  }
+  
+  
   void login(String email, String password) async {
     try{
       Response response = await post(
         Uri.parse("https://www.datapaytecnologia.com.br/erp/apiErp/login/login.php"),
-        body: {
-          'email' : email,
-          'senha' : password,
-        }
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'senha': password,
+          }),
       );
+
       if(response.statusCode == 200){
+
         var data = jsonDecode(response.body.toString());
-        print(data);
-        print('ok');
+
+        String id = data['result'][0]['id']; //id do usuario
+
+
+
       }else{
         print('failed');
       }
