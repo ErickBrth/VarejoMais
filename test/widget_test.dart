@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:varejoMais/MyApp.dart';
+import 'package:varejoMais/my_app.dart';
 
 import 'package:varejoMais/main.dart';
 
