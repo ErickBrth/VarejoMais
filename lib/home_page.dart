@@ -103,6 +103,7 @@ class HomePage extends StatelessWidget {
                           Navigator.of(context).pushReplacementNamed("/");
                         }
                       },
+                      icon: Icons.sync,
                     ),
                   ),
                   Image.asset(

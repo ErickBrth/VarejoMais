@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:varejoMais/home_page.dart';
 import 'package:varejoMais/pages/Cancelamento.dart';
+import 'package:varejoMais/pages/carrinho/carrinho.dart';
 import 'package:varejoMais/pages/coletor.dart';
 import 'package:varejoMais/pages/estoque.dart';
 import 'package:varejoMais/pages/reimpressao.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/cancelamento': (context) => const Cancelamento(),
         '/estoque': (context) => const Estoque(),
         '/coletor': (context) => const Coletor(),
+        '/carrinho': (context) => const Carrinho(),
       },
     );
   }

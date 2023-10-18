@@ -3,10 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+
+
 import 'package:varejoMais/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -15,9 +19,10 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String id = "";
+  String idEmpresa = "";
+
 
   final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     super.initState();
@@ -30,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         body: Form(
@@ -134,14 +140,26 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setString('token', token);
   }
 
+  Future<String> getToken() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String minhaString = prefs.getString('idEmpresa') ?? 'Valor Padrão';
+    return minhaString;
+  }
+
+
   Future<bool> verifyToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (prefs.getString("token").toString().isNotEmpty) {
-      return false; // O usuário está logado.
+      return false; // O usuário não está logado.
     } else {
-      return true; // O usuário não está logado.
+      return true; // O usuário está logado.
     }
+  }
+  Future<void> storeIdEmpresa(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('idEmpresa', token);
+
   }
 
   Future<bool> login() async {
@@ -160,8 +178,11 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
+
         id = data['result'][0]['id'].toString(); //id do usuario
+        idEmpresa = data['result'][0]['empresa'].toString();
         storeToken(id);
+        storeIdEmpresa(idEmpresa);
         return true;
       } else {
         return false;
@@ -170,4 +191,5 @@ class _LoginPageState extends State<LoginPage> {
       return false;
     }
   }
+
 }
