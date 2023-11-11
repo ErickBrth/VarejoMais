@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:varejoMais/home_page.dart';
-import 'package:varejoMais/pages/Cancelamento.dart';
+import 'package:varejoMais/pages/Cancelamento/cancelamento.dart';
+import 'package:varejoMais/pages/HomePage/home_page.dart';
+import 'package:varejoMais/pages/pagamento/components/pix_datapay.dart';
 import 'package:varejoMais/pages/carrinho/carrinho.dart';
 import 'package:varejoMais/pages/coletor.dart';
 import 'package:varejoMais/pages/estoque.dart';
 import 'package:varejoMais/pages/reimpressao.dart';
 import 'package:varejoMais/pages/Venda/venda.dart';
 import 'package:varejoMais/pages/Login/login_page.dart';
+import 'package:varejoMais/pages/VendaFinalizada/venda_finalizada.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/estoque': (context) => const Estoque(),
         '/coletor': (context) => const Coletor(),
         '/carrinho': (context) => const Carrinho(),
+        '/vendaFinalizada': (context) => const VendaFinalizada(),
       },
     );
   }

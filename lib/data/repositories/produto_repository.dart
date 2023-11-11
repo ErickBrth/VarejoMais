@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varejoMais/data/http/exceptions.dart';
 import 'package:varejoMais/data/http/http_client.dart';

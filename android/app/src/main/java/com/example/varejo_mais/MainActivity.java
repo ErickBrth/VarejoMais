@@ -14,8 +14,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
 import java.util.Locale;
 
 import io.flutter.plugins.GeneratedPluginRegistrant;
@@ -55,16 +57,19 @@ public class MainActivity extends FlutterActivity {
 
     private final String CHANNEL = "unique.identifier.method/hello";
     private final String CHANNEL1 = "unique.identifier.method/getLongAmount";
-//    private final String CREDIT_CARD = "unique.identifier.method/creditoParcelado";
+
+
+    private final String CREDITO_PARCELADO = "unique.identifier.method/creditoParcelado";
 
     private final String REPRINT = "unique.identifier.method/reprint";
-    private final String CREDITO_PARCELADO_EMISSOR = "unique.identifier.method/creditoParceladoEmissor";
+    //private final String CREDITO_PARCELADO_EMISSOR = "unique.identifier.method/creditoParceladoEmissor";
     private final String CREDITO_A_VISTA = "unique.identifier.method/creditoVista";
     private final String CARTAO_DEBITO = "unique.identifier.method/debito";
     private final String VOUCHER = "unique.identifier.method/voucher";
     private final String REVERSAL = "unique.identifier.method/estorno";
+    private final String PIX = "unique.identifier.method/pix";
 
-
+    private PaymentStatusCallback paymentStatusCallback;
 
     private TextView PVNumberText;
 
@@ -83,11 +88,20 @@ public class MainActivity extends FlutterActivity {
 
         });
 
-        MethodChannel CreditoParceladoEmissor = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CREDITO_PARCELADO_EMISSOR);
-        CreditoParceladoEmissor.setMethodCallHandler((call, result) -> {
+        MethodChannel CreditoParcelado = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CREDITO_PARCELADO);
+        CreditoParcelado.setMethodCallHandler((call, result) -> {
 
-            if(call.method.equals("creditoParceladoEmissor")){
-                result.success(creditoParceladoEmissor());
+            if(call.method.equals("creditoParcelado")){
+                HashMap args = (HashMap) call.arguments;
+                double valor = (double) args.get("valor");
+                int parcelas = (int) args.get("parcelas");
+                paymentStatusCallback = new PaymentStatusCallback() {
+                    @Override
+                    public void onPaymentStatusReceived(String paymentStatus) {
+                        result.success(paymentStatus);
+                    }
+                };
+                  creditoParcelado(valor,parcelas);
             }else{
                 result.notImplemented();
             }
@@ -97,7 +111,14 @@ public class MainActivity extends FlutterActivity {
         creditoVista.setMethodCallHandler((call, result) -> {
 
             if(call.method.equals("creditoVista")){
-                result.success(creditoVista());
+                double valor = call.argument("valor");
+                paymentStatusCallback = new PaymentStatusCallback() {
+                    @Override
+                    public void onPaymentStatusReceived(String paymentStatus) {
+                        result.success(paymentStatus);
+                    }
+                };
+                creditoVista(valor);
             }else{
                 result.notImplemented();
             }
@@ -107,7 +128,14 @@ public class MainActivity extends FlutterActivity {
         debito.setMethodCallHandler((call, result) -> {
 
             if(call.method.equals("debito")){
-                result.success(debito());
+                double valor = call.argument("valor");
+                paymentStatusCallback = new PaymentStatusCallback() {
+                    @Override
+                    public void onPaymentStatusReceived(String paymentStatus) {
+                        result.success(paymentStatus);
+                    }
+                };
+                debito(valor);
             }else{
                 result.notImplemented();
             }
@@ -133,6 +161,23 @@ public class MainActivity extends FlutterActivity {
             }
         });
 
+        MethodChannel pix = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), PIX);
+        pix.setMethodCallHandler((call, result) -> {
+
+            if(call.method.equals("pix")){
+                double valor = call.argument("valor");
+                paymentStatusCallback = new PaymentStatusCallback() {
+                    @Override
+                    public void onPaymentStatusReceived(String paymentStatus) {
+                        result.success(paymentStatus);
+                    }
+                };
+                pix(valor);
+            }else{
+                result.notImplemented();
+            }
+        });
+
     }
     public String reprint(){
         onReprint();
@@ -140,19 +185,20 @@ public class MainActivity extends FlutterActivity {
     }
 
 
-    public String creditoParceladoEmissor(){
-        openPaymentFragmentCreditoEmissor();
-        return "ok!";
+    public String creditoParcelado(double valor, int parcelas){
+        openPaymentCreditoParcelado(valor,parcelas);
+        return "ok";
+
     }
 
-    public String creditoVista(){
-        openPaymentFragmentCreditoVista();
-        return "ok!";
+    public String creditoVista(double valor){
+        openPaymentFragmentCreditoVista(valor);
+        return "ok";
     }
 
-    public String debito(){
-        openPaymentDebit();
-        return "ok!";
+    public String debito(double valor){
+        openPaymentDebit(valor);
+        return "ok";
     }
 
     public String voucher(){
@@ -164,6 +210,13 @@ public class MainActivity extends FlutterActivity {
         onReversal();
         return "ok!";
     }
+
+    public String pix(double valor){
+       openPaymentPix(valor);
+        return "ok!";
+    }
+
+
 
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -183,8 +236,6 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         redePayments = RedePayments.getInstance(this);
-
-
         setTitle(getString(R.string.app_name) + " v" + BuildConfig.VERSION_NAME);
         GeneratedPluginRegistrant.registerWith(new FlutterEngine(this));
 
@@ -193,30 +244,42 @@ public class MainActivity extends FlutterActivity {
 
     //crédito parcelado sem juros
 
-//    public void openPaymentFragment() {
+    public void openPaymentCreditoParcelado(double valor, int parcelas) {
+        try {
+            Intent collectPaymentIntent = redePayments
+                    .intentForPaymentBuilder(FlexTipoPagamento.CREDITO_PARCELADO,
+                            getLongAmount(valor))
+                    .setInstallments(parcelas)// numero de parcelas
+                    .build();
+            startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
+        } catch (ActivityNotFoundException ex) {
+            Log.e("Varejo+ ", "Poynt Payment Activity not found - did you install PoyntServices?");
+        } catch (RedePaymentValidationError redePaymentValidationError) {
+            Toast.makeText(this, redePaymentValidationError.getMessage(),
+                    LENGTH_LONG).show();
+        }
+    }
+
+    //crédito parcelado com juros
+//    public void openPaymentFragmentCreditoEmissor() {
 //        hideReceipt();
 //        try {
-//            Intent collectPaymentIntent = redePayments
-//                    .intentForPaymentBuilder(FlexTipoPagamento.CREDITO_PARCELADO,
-//                            getLongAmount())
+//            Intent collectPaymentIntent = redePayments.intentForPaymentBuilder(
+//                            FlexTipoPagamento.CREDITO_PARCELADO_EMISSOR, getLongAmount())
 //                    .setInstallments(4)
 //                    .build();
 //            startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
 //        } catch (ActivityNotFoundException ex) {
-//            Log.e("Varejo+ ", "Poynt Payment Activity not found - did you install PoyntServices?");
-//        } catch (RedePaymentValidationError redePaymentValidationError) {
-//            Toast.makeText(this, redePaymentValidationError.getMessage(),
-//                    LENGTH_LONG).show();
+//            Log.e("Varejo+", "Poynt Payment Activity not found - did you install PoyntServices?");
+//        } catch (RedePaymentValidationError redePaymentValidationError){
+//            Toast.makeText(this, redePaymentValidationError.getMessage(), LENGTH_LONG).show();
 //        }
 //    }
 
-    //crédito parcelado com juros
-    public void openPaymentFragmentCreditoEmissor() {
-        hideReceipt();
+    public void openPaymentFragmentCreditoVista(double valor) {
         try {
             Intent collectPaymentIntent = redePayments.intentForPaymentBuilder(
-                            FlexTipoPagamento.CREDITO_PARCELADO_EMISSOR, getLongAmount())
-                    .setInstallments(4)
+                            FlexTipoPagamento.CREDITO_A_VISTA, getLongAmount(valor))
                     .build();
             startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
         } catch (ActivityNotFoundException ex) {
@@ -226,11 +289,10 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    public void openPaymentFragmentCreditoVista() {
-        hideReceipt();
+    public void openPaymentPix(double valor) {
         try {
             Intent collectPaymentIntent = redePayments.intentForPaymentBuilder(
-                            FlexTipoPagamento.CREDITO_A_VISTA, getLongAmount())
+                            FlexTipoPagamento.PIX, getLongAmount(valor))
                     .build();
             startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
         } catch (ActivityNotFoundException ex) {
@@ -240,25 +302,10 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    public void openPaymentPix() {
-        hideReceipt();
+    public void openPaymentDebit(double valor) {
         try {
             Intent collectPaymentIntent = redePayments.intentForPaymentBuilder(
-                            FlexTipoPagamento.PIX, getLongAmount())
-                    .build();
-            startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
-        } catch (ActivityNotFoundException ex) {
-            Log.e("Varejo+", "Poynt Payment Activity not found - did you install PoyntServices?");
-        } catch (RedePaymentValidationError redePaymentValidationError){
-            Toast.makeText(this, redePaymentValidationError.getMessage(), LENGTH_LONG).show();
-        }
-    }
-
-    public void openPaymentDebit() {
-        hideReceipt();
-        try {
-            Intent collectPaymentIntent = redePayments.intentForPaymentBuilder(
-                            FlexTipoPagamento.DEBITO, getLongAmount())
+                            FlexTipoPagamento.DEBITO, getLongAmount(valor))
                     .build();
             startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
         } catch (ActivityNotFoundException ex) {
@@ -269,10 +316,9 @@ public class MainActivity extends FlutterActivity {
     }
 
     public void openPaymentVoucher() {
-        hideReceipt();
         try {
             Intent collectPaymentIntent = redePayments.intentForPaymentBuilder(
-                            FlexTipoPagamento.VOUCHER, getLongAmount())
+                            FlexTipoPagamento.VOUCHER, 6)
                     .build();
             startActivityForResult(collectPaymentIntent, REQ_CODE_PAYMENT);
         } catch (ActivityNotFoundException ex) {
@@ -282,22 +328,17 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
-    private int getLongAmount() { //receber valor da compra
-        //TODO
-        int amount = 500;
-
-        // String amountString = ((EditText)
-        // findViewById(R.id.valor)).getText().toString();
-        // if (!TextUtils.isEmpty(amountString)) {
-        // amount = Integer.parseInt(amountString);
-        // }
+    private long getLongAmount(double valor) { //receber valor da compra
+        BigDecimal valorBigDecimal = new BigDecimal(valor);
+        BigDecimal valorArredondado = valorBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+        long amount = valorArredondado.multiply(BigDecimal.valueOf(100)).longValue();
         return amount;
     }
 
-    private void hideReceipt(){ // ocultar receita(NF)
-       // RelativeLayout rl = findViewById(R.id.rlReceipt);
-        //rl.setVisibility(View.GONE);
-    }
+//    private void hideReceipt(){ // ocultar receita(NF)
+//       // RelativeLayout rl = findViewById(R.id.rlReceipt);
+//        //rl.setVisibility(View.GONE);
+//    }
 
     @Override
     public void onResume(){
@@ -312,7 +353,7 @@ public class MainActivity extends FlutterActivity {
     }
 
     public void onReprint() {
-        hideReceipt();
+        //hideReceipt();
         try {
             Intent reprint = redePayments.intentForReprint();
             startActivityForResult(reprint, REQ_CODE_REPRINT);
@@ -324,7 +365,7 @@ public class MainActivity extends FlutterActivity {
     }
 
     public void onReversal() {
-        hideReceipt();
+        //hideReceipt();
         try {
             Intent reversal = redePayments.intentForReversal();
             startActivityForResult(reversal, REQ_CODE_REVERSAL);
@@ -336,24 +377,39 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        hideReceipt();
+        //hideReceipt();
         String s = "";
         switch(requestCode){
             case REQ_CODE_PAYMENT:
                 if(resultCode== Activity.RESULT_OK){
                     Payment payment = RedePayments.getPaymentFromIntent(data);
                     if (payment.getStatus() == PaymentStatus.AUTHORIZED) {
+
+                        String paymentStatus = "ok!";
+                        if (paymentStatusCallback != null) {
+                            paymentStatusCallback.onPaymentStatusReceived(paymentStatus);
+                        }
+
                         Receipt receipt = payment.getReceipt();
                         s = "Payment Authorized\n";
                         s += "Valor: $" + moneyFormat.format(payment.getAmount() / 100d);
-                        showReceipt(receipt);
                         Toast.makeText(this, s, LENGTH_LONG).show();
+
                     } else {
+                        String paymentStatus = "erro";
+                        if (paymentStatusCallback != null) {
+                            paymentStatusCallback.onPaymentStatusReceived(paymentStatus);
+                        }
                         String msg = "Resultado da transação:\n" + getPaymentStatus(data);
                         Toast.makeText(this, msg, LENGTH_LONG).show();
                     }
                 } else if (resultCode==Activity.RESULT_CANCELED) {
+                    String paymentStatus = "erro";
+                    if (paymentStatusCallback != null) {
+                        paymentStatusCallback.onPaymentStatusReceived(paymentStatus);
+                    }
                     Toast.makeText(this, "Payment Canceled", LENGTH_SHORT).show();
+
                 }
                 break;
 
@@ -376,6 +432,9 @@ public class MainActivity extends FlutterActivity {
         }
     }
 
+
+
+
     private @NonNull String getPaymentStatus(@Nullable Intent intent) {
         String result = "Sem objeto Payment";
         if (intent != null) {
@@ -392,15 +451,18 @@ public class MainActivity extends FlutterActivity {
         return result;
     }
 
-    private String showReceipt(Receipt receipt){
-        //todo
-        String result ="";
-        result += "CNPJ: "+ receipt.getCNPJ() +
-                " ///nome da loja: "+ receipt.getStoreName() +
-                " ///dono do cartao: "+ receipt.getCardHolderName();
-
-        return result;
-    }
-
+//    private String showReceipt(Receipt receipt){
+//        //todo
+//        String result ="";
+//        result += "CNPJ: "+ receipt.getCNPJ() +
+//                " ///nome da loja: "+ receipt.getStoreName() +
+//                " ///dono do cartao: "+ receipt.getCardHolderName();
+//
+//        return result;
+//    }
+public interface PaymentStatusCallback {
+    void onPaymentStatusReceived(String paymentStatus);
+}
 
 }
+

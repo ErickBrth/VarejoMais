@@ -1,11 +1,14 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:varejoMais/data/models/produto_model.dart';
 
 class CarrinhoController extends ChangeNotifier{
-  Map<ProdutoModel, int> _produtosNoCarrinho = {};
+  final Map<ProdutoModel, int> _produtosNoCarrinho = {};
 
   Map<ProdutoModel, int> get produtos => _produtosNoCarrinho;
+
 
   void adicionarProduto(ProdutoModel produto) {
     if (_produtosNoCarrinho.containsKey(produto)) {
@@ -20,6 +23,11 @@ class CarrinhoController extends ChangeNotifier{
     notifyListeners();
   }
 
+  void zerarQuantidades() {
+    _produtosNoCarrinho.updateAll((produto, quantidade) => 0);
+    notifyListeners();
+  }
+
   void removerProduto(ProdutoModel produto) {
     if (_produtosNoCarrinho.containsKey(produto)) {
       if ((_produtosNoCarrinho[produto] ?? 0) > 1) {
@@ -31,6 +39,10 @@ class CarrinhoController extends ChangeNotifier{
     }
   }
 
+  int qtdProdutos(ProdutoModel produto) {
+    return (_produtosNoCarrinho[produto] ?? 0)+1;// +1 para adicionar a quantidade real do produto e nao sua posição no map
+  }
+
   double calcularTotal() {
     double total = 0;
     _produtosNoCarrinho.forEach((produto, quantidade) {
@@ -38,4 +50,5 @@ class CarrinhoController extends ChangeNotifier{
     });
     return total;
   }
+
 }

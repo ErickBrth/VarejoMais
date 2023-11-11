@@ -5,14 +5,11 @@ class MyLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.2,
-        ),
-        const CircularProgressIndicator(),
+        CircularProgressIndicator(),
       ],
     );
   }
