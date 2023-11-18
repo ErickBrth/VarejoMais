@@ -18,8 +18,7 @@ class PixController implements IPixController {
   String pixId = "";
   Timer? _timer;
   Timer? _maxTimer;
-  String refundMessage = "";
-  String refundStatus = "";
+  String clientId = "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY";
 
   get getPixStatus => pixStatus.value;
 
@@ -30,8 +29,7 @@ class PixController implements IPixController {
 
     double? valorStr = double.tryParse(valor);
     final Map<String, dynamic?> requestBody = {
-      "client_id":
-          "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY",
+      "client_id": clientId,
       "item_title": "",
       "total": valorStr,
       "wallet": "DataPayWalletPix"
@@ -63,8 +61,7 @@ class PixController implements IPixController {
         "https://pix.datapaytecnologia.com.br/api/client/orders/order/$id";
 
     final Map<String, dynamic?> requestBody = {
-      "client_id":
-          "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY",
+      "client_id": clientId,
     };
 
     final response = await http.post(
@@ -92,8 +89,7 @@ class PixController implements IPixController {
         "https://pix.datapaytecnologia.com.br/api/client/orders/orders";
 
     final Map<String, dynamic?> requestBody = {
-      "client_id":
-      "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY",
+      "client_id": clientId,
     };
 
     final response = await http.post(
@@ -124,8 +120,7 @@ class PixController implements IPixController {
         "https://pix.datapaytecnologia.com.br/api/client/orders/order/$id/refund";
 
     final Map<String, dynamic?> requestBody = {
-      "client_id":
-      "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY",
+      "client_id": clientId,
     };
 
     final response = await http.delete(
@@ -151,9 +146,7 @@ class PixController implements IPixController {
   Future<dynamic> refundPix() async{
     PixModel lastOrder = await getLastOrderPix();
     String id = lastOrder.order_id;
-    final refundPix = await _refundPix(id); //e88501c5-7a50-4af8-bff5-d4166148045e fazer refund
-    refundMessage = refundPix["message"];
-    refundStatus = refundPix["status"] ?? "";
+    final refundPix = await _refundPix(id);
     return refundPix;
   }
 
@@ -163,8 +156,7 @@ class PixController implements IPixController {
         "https://pix.datapaytecnologia.com.br/api/client/orders/order/$id";
 
     final Map<String, dynamic?> requestBody = {
-      "client_id":
-      "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY",
+      "client_id": clientId,
     };
 
     final response = await http.delete(

@@ -22,7 +22,7 @@ class ActionButton extends StatelessWidget {
         ),
         side: const MaterialStatePropertyAll<BorderSide>(
             BorderSide(color: Color.fromRGBO(248, 67, 21, 1.0), width: 2.0)),
-
+        padding: MaterialStatePropertyAll(EdgeInsetsDirectional.only(top: 5,bottom: 5)),
         elevation: MaterialStateProperty.all(8),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
@@ -30,21 +30,17 @@ class ActionButton extends StatelessWidget {
           ),
 
         ),
-        fixedSize: MaterialStateProperty.all(const Size(40, 45)),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            alignment: AlignmentDirectional.center,
-            padding: const EdgeInsetsDirectional.only(top: 5),
-            child: Text(
-              label,
-              style: const TextStyle(
-                  fontFamily: "Arista-Pro-Bold-trial",
-                  color: Color.fromRGBO(248, 67, 21, 1.0),
-                  fontSize: 22),
-            ),
+          Text(
+            label,
+            //textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontFamily: "Arista-Pro-Bold-trial",
+                color: Color.fromRGBO(248, 67, 21, 1.0),
+                fontSize: 22),
           ),
           Container(
             padding: const EdgeInsetsDirectional.only(start: 10),

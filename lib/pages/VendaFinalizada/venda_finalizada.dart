@@ -11,7 +11,7 @@ class VendaFinalizada extends StatelessWidget {
   Widget build(BuildContext context) {
     final carrinho = Provider.of<CarrinhoController>(context);
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Material(
@@ -42,7 +42,6 @@ class VendaFinalizada extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -51,12 +50,11 @@ class VendaFinalizada extends StatelessWidget {
                       // crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Container(
-                          padding: const EdgeInsetsDirectional.only(bottom: 35,end: 25),
+                          padding: const EdgeInsetsDirectional.only(
+                              bottom: 35, end: 25),
                           alignment: AlignmentDirectional.bottomCenter,
                           child: FloatingActionButton(
-                              onPressed: () {
-
-                              },
+                            onPressed: () {},
                             backgroundColor: Color.fromRGBO(248, 67, 21, 1.0),
                             child: Icon(Icons.receipt_long_outlined),
                           ),
@@ -65,17 +63,15 @@ class VendaFinalizada extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                      );
                         carrinho.produtos.clear();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage()),
+                          (route) => false,
+                        );
                       },
-                      child: const BottomButton(
-                          text: "TELA INICIAL"
-                      ),
+                      child: const BottomButton(text: "TELA INICIAL"),
                     ),
                   ],
                 )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:varejoMais/pages/Cancelamento/cancelamento.dart';
 import 'package:varejoMais/pages/HomePage/home_page.dart';
+import 'package:varejoMais/pages/Login/auth/auth.dart';
 import 'package:varejoMais/pages/pagamento/components/pix_datapay.dart';
 import 'package:varejoMais/pages/carrinho/carrinho.dart';
 import 'package:varejoMais/pages/coletor.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: scaffoldKey,
       title: "Varejo+",
       initialRoute: '/',
-      debugShowCheckedModeBanner: false, //shows debug banner
+      debugShowCheckedModeBanner: false, //show debug banner
       routes: {
         '/': (context) => const LoginPage(),
         '/home': (context) => HomePage(),
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/coletor': (context) => const Coletor(),
         '/carrinho': (context) => const Carrinho(),
         '/vendaFinalizada': (context) => const VendaFinalizada(),
+        '/auth': (context) => const AuthPage(),
       },
     );
   }

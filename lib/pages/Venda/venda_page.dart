@@ -109,62 +109,64 @@ class _VendaPageState extends State<VendaPage> {
                               ),
                             );
                           } else {
-                            return Column(
-                              // /mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 10),
-                                  child: MySearch(
-                                    onChanged: (searchText) {
-                                      searchText =
-                                          searchText.toLowerCase();
-                                      setState(() {
-                                        _produtosDisplay =
-                                            _produtos.where((u) {
-                                              var nome = u.nome.toLowerCase();
-                                              return nome
-                                                  .contains(searchText);
-                                            }).toList();
-                                      });
-                                    },
+                            return Center(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    child: MySearch(
+                                      onChanged: (searchText) {
+                                        searchText =
+                                            searchText.toLowerCase();
+                                        setState(() {
+                                          _produtosDisplay =
+                                              _produtos.where((u) {
+                                                var nome = u.nome.toLowerCase();
+                                                return nome
+                                                    .contains(searchText);
+                                              }).toList();
+                                        });
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      child: SizedBox(
-                                        height: MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.35),
-                                        child: ProdutosGridview(
-                                          produtosDisplay: _produtosDisplay,
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Flexible(
+                                        fit: FlexFit.loose,
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.35),
+                                          child: ProdutosGridview(
+                                            produtosDisplay: _produtosDisplay,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-
-                                      child: SizedBox(
-                                        height: 50,
-                                        width: 231,
-                                        child: ActionButton(
-                                          label: "ADICIONAR ITEM",
-                                          onPressed: () {
-                                            if(Provider.of<CarrinhoController>(context, listen: false).produtos.isNotEmpty){
-                                              Navigator.pushNamed(context, "/carrinho");
-                                            }
-                                          },
-                                          icon: Icons.add,
+                                    ],
+                                  ),
+                                  Row(
+                                    //mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: SizedBox(
+                                          height: 50,
+                                          width: 231,
+                                          child: ActionButton(
+                                            label: "ADICIONAR ITEM",
+                                            onPressed: () {
+                                              if(Provider.of<CarrinhoController>(context, listen: false).produtos.isNotEmpty){
+                                                Navigator.pushNamed(context, "/carrinho");
+                                              }
+                                            },
+                                            icon: Icons.add,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             );
                           }
                         }),

@@ -30,6 +30,7 @@ class DialogReimpressao {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
+                          Navigator.of(context).pop();
                           await platformChannel.reprint();
                         },
                         style: const ButtonStyle(
@@ -64,7 +65,9 @@ class DialogReimpressao {
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+
+                        },
                         style: const ButtonStyle(
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.blueAccent),

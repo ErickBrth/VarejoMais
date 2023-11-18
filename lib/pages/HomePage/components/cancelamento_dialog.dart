@@ -9,8 +9,6 @@ import '../../../data/controllers/pixController.dart';
 class DialogCancelamento {
   final platformChannel = PlatformChannel();
 
-
-
   Future<void> showCancelamentoDialog(BuildContext context) async {
     await showDialog(
         context: context,
@@ -35,6 +33,7 @@ class DialogCancelamento {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
+                          Navigator.of(context).pop();
                           await platformChannel.estorno();
                         },
                         style: const ButtonStyle(
@@ -67,7 +66,6 @@ class DialogCancelamento {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
-                          // pixController.refundPix();
                           Navigator.of(context).pop();
                           Navigator.of(context).pushNamed('/cancelamento');
 
