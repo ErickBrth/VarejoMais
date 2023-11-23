@@ -37,6 +37,7 @@ class _ButtonGridState extends State<ButtonGrid> {
           valueListenable: widget.pagamentoController.valorRestate,
           builder: (context, valor, child) {
             return GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               //número de colunas desejado
               mainAxisSpacing: 10.0,

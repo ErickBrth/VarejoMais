@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varejoMais/data/controllers/carrinho_controller.dart';
-import 'package:varejoMais/pages/HomePage/components/cancelamento_dialog.dart';
-import 'package:varejoMais/pages/Login/auth/auth.dart';
 import 'package:varejoMais/shared/components/action_button.dart';
 import 'package:varejoMais/shared/components/home_page_button.dart';
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
@@ -22,21 +20,27 @@ class HomePage extends StatelessWidget{
       child: SafeArea(
         child: Scaffold(
           body: Material(
-            child: Center(
-              child: Stack(
-                  children: [
-                Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    width: 297,
-                    height: 120,
-                  )
-                ]),
-                Container(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  child: SingleChildScrollView(
+            child: Column(
+                children: [
+                  Expanded(
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/logo.png',
+                            width: 297,
+                            height: 120,
+                          )
+                        ]),
+                  ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -122,15 +126,15 @@ class HomePage extends StatelessWidget{
                                 width: 121,
                                 height: 30,
                               ),
-                              const Padding(padding: EdgeInsets.only(bottom: 40)),
+                              //const Padding(padding: EdgeInsets.only(bottom: 40)),
                             ],
                           )
                         ]),
                   ),
                 ),
+              ),
 
-              ]),
-            ),
+            ]),
           ),
         ),
       ),

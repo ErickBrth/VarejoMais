@@ -73,12 +73,15 @@ class _VendaPageState extends State<VendaPage> {
                         ]),
                         builder: (BuildContext context, Widget? child) {
                           if (store.isLoading.value) {
-                            return const SizedBox(
-                              height: 700,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [CircularProgressIndicator()]),
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                    child: Container(
+                                        alignment: AlignmentDirectional.center,
+                                        height: MediaQuery.of(context).size.height,
+                                        child: const CircularProgressIndicator())),
+                              ],
                             );
                           }
 
