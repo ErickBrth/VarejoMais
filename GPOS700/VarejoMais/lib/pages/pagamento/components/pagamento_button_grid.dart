@@ -235,6 +235,7 @@ class _ButtonGridState extends State<ButtonGrid> {
 
   void digitarNumeroParcelas(double totalVenda, int parcelas, double valor) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
