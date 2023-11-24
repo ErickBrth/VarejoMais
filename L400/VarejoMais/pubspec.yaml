@@ -74,6 +74,7 @@ flutter:
     - assets/images/logoSmall.png
     - assets/images/product_logo.jpg
     - assets/ca/lets-encrypt-r3.pem
+    - assets/ca/isrgrootx1.pem
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
