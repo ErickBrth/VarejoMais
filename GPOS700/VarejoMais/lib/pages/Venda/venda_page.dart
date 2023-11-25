@@ -37,10 +37,12 @@ class _VendaPageState extends State<VendaPage> {
     store.getProdutos();
     Provider.of<CarrinhoController>(context, listen: false).produtos.clear();
     ProdutoRepository(client: HttpClient()).getProdutos().then((value) {
-      setState(() {
-        _produtos.addAll(value);
-        _produtosDisplay = _produtos;
-      });
+      if(mounted){
+        setState(() {
+          _produtos.addAll(value);
+          _produtosDisplay = _produtos;
+        });
+      }
     });
   }
 
@@ -120,13 +122,15 @@ class _VendaPageState extends State<VendaPage> {
                                     child: MySearch(
                                       onChanged: (searchText) {
                                         searchText = searchText.toLowerCase();
-                                        setState(() {
-                                          _produtosDisplay =
-                                              _produtos.where((u) {
-                                            var nome = u.nome.toLowerCase();
-                                            return nome.contains(searchText);
-                                          }).toList();
-                                        });
+                                        if(mounted){
+                                          setState(() {
+                                            _produtosDisplay =
+                                                _produtos.where((u) {
+                                                  var nome = u.nome.toLowerCase();
+                                                  return nome.contains(searchText);
+                                                }).toList();
+                                          });
+                                        }
                                       },
                                     ),
                                   ),

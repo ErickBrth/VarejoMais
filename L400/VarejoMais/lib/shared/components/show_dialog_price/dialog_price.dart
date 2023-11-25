@@ -87,6 +87,7 @@ class DialogPrice {
                           currentFocus.unfocus();
                         }
                         inputValue = valorController.text;
+
                         Navigator.of(context).pop();
                       }
                     },
@@ -109,6 +110,7 @@ class DialogPrice {
         );
       },
     );
+    inputValue = inputValue.replaceAll('.', '');
     return double.tryParse(inputValue.replaceAll(',', '.'))?? 0;
   }
 }

@@ -109,6 +109,7 @@ class DialogPrice {
         );
       },
     );
+    inputValue = inputValue.replaceAll('.', '');
     return double.tryParse(inputValue.replaceAll(',', '.'))?? 0;
   }
 }

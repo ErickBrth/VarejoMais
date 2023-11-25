@@ -61,7 +61,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                   label: "Cartão Débito",
                   onPressed: () async {
                     valorAPagar =
-                        (await DialogPrice().showInputDialog(context, valor))!;
+                    (await DialogPrice().showInputDialog(context, valor))!;
                     valorTotalPago = valor;
                     String result = "";
                     if (valorAPagar > 0.0) {
@@ -78,9 +78,6 @@ class _ButtonGridState extends State<ButtonGrid> {
                         if (valorRestante == 0.0) {
                           Navigator.pushReplacementNamed(
                               context, '/vendaFinalizada');
-                        } else {
-                          print("valor Restante $valorRestante");
-                          // Navigator.of(context).pop();
                         }
                       }
                     }
@@ -141,6 +138,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                         String result = "";
                         if (valorAPagar > 0.0) {
                           result = await platformChannel.creditoVista(valorAPagar);
+                          Navigator.of(context).pop();
                           if (result == "ok!") {
                             double valorRestante = double.parse(widget
                                 .pagamentoController.valorRestate.value
@@ -150,12 +148,9 @@ class _ButtonGridState extends State<ButtonGrid> {
                             valorRestante = double.parse(widget
                                 .pagamentoController.valorRestate.value
                                 .toStringAsFixed(2));
-                            print("valor total venda ${widget.totalVenda}");
                             if (valorRestante == 0.0) {
                               Navigator.pushReplacementNamed(
                                   context, '/vendaFinalizada');
-                            } else {
-                              Navigator.of(context).pop();
                             }
                           }
                         }
@@ -193,7 +188,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                     child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          Navigator.of(context).pop();
+                          //Navigator.of(context).pop();
                           digitarNumeroParcelas(
                               widget.totalVenda, parcelas, valor);
                         });
@@ -251,7 +246,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                   validator: (numParcelas) {
                     if (numParcelas == null ||
                         numParcelas.isEmpty ||
-                        parcelas == 0) {
+                        parcelas <= 1) {
                       return 'Parcelas inválidas';
                     }
                     return null;
@@ -312,6 +307,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                             String result = "";
                             if (valorAPagar > 0.0) {
                               result = await platformChannel.creditoParcelado(valorAPagar, parcelas);
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
                               if (result == "ok!") {
                                 double valorRestante = double.parse(widget
                                     .pagamentoController.valorRestate.value
@@ -324,15 +321,11 @@ class _ButtonGridState extends State<ButtonGrid> {
                                 if (valorRestante == 0.0) {
                                   Navigator.pushReplacementNamed(
                                       context, '/vendaFinalizada');
-                                } else {
-                                  print("valor Restante $valorRestante");
-                                  // Navigator.of(context).pop();
                                 }
                               }
                             }
                           }
                         }
-                        Navigator.of(context).pop();
                       },
                       style: const ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
