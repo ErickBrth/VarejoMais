@@ -59,6 +59,7 @@ class _CancelamentoState extends State<Cancelamento> {
                         ),
                         Expanded(
                           child: ListView(
+                            physics: const NeverScrollableScrollPhysics(),
                             children: [
                               ListTile(
                                 shape: const RoundedRectangleBorder(side:BorderSide(width: 2,color: Color.fromRGBO(248, 67, 21, 1.0)) ,borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -107,28 +108,31 @@ class _CancelamentoState extends State<Cancelamento> {
                         ),
                             Flexible(
                               fit: FlexFit.loose,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  refund = await pixController.refundPix();
-                                  final message = refund["message"];
-                                  final status = refund["status"];
-                                  await Future.delayed(const Duration(seconds: 1));
-                                  showCustomSnackbar('$message');
-                                  if(status == "refund_pending"){
-                                    showCustomSnackbar('$message');
+                              child: Container(
+                                alignment: AlignmentDirectional.center,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    refund = await pixController.refundPix();
+                                    final message = refund["message"];
+                                    final status = refund["status"];
                                     await Future.delayed(const Duration(seconds: 1));
-                                    Navigator.of(context)
-                                        .pushNamed('/home');
-                                  }
-                                },
-                                style: const ButtonStyle(
-                                  padding: MaterialStatePropertyAll(EdgeInsetsDirectional.all(10)),
-                                  backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(248, 67, 21, 1.0)),
-                                ),
-                                child: const Text(
-                                  "Estornar Pagamento",
-                                  style: TextStyle(
-                                    fontSize: 20,
+                                    showCustomSnackbar('$message');
+                                    if(status == "refund_pending"){
+                                      showCustomSnackbar('$message');
+                                      await Future.delayed(const Duration(seconds: 1));
+                                      Navigator.of(context)
+                                          .pushNamed('/home');
+                                    }
+                                  },
+                                  style: const ButtonStyle(
+                                    padding: MaterialStatePropertyAll(EdgeInsetsDirectional.all(10)),
+                                    backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(248, 67, 21, 1.0)),
+                                  ),
+                                  child: const Text(
+                                    "Estornar Pagamento",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ),
                               ),

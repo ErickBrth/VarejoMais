@@ -82,7 +82,6 @@ class AuthPage extends StatelessWidget {
                                 currentFocus.unfocus();
                               }
                               if (loginState) {
-                                print("logado");
                                 Navigator.of(context).pushReplacementNamed('/home');
                                 DialogCancelamento().showCancelamentoDialog(context);
                               } else {

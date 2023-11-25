@@ -31,24 +31,25 @@ class _VendaPageState extends State<VendaPage> {
   final ProdutoRepository produtoRepository =
   ProdutoRepository(client: HttpClient());
 
-
   @override
   void initState() {
     super.initState();
     store.getProdutos();
-     Provider.of<CarrinhoController>(context, listen: false).produtos.clear();
+    Provider.of<CarrinhoController>(context, listen: false).produtos.clear();
     ProdutoRepository(client: HttpClient()).getProdutos().then((value) {
-      setState(() {
-        _produtos.addAll(value);
-        _produtosDisplay = _produtos;
-      });
+      if(mounted){
+        setState(() {
+          _produtos.addAll(value);
+          _produtosDisplay = _produtos;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: Material(
@@ -63,7 +64,7 @@ class _VendaPageState extends State<VendaPage> {
             ),
             body: SingleChildScrollView(
               child: Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
+                //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AnimatedBuilder(
                         animation: Listenable.merge([
@@ -120,16 +121,16 @@ class _VendaPageState extends State<VendaPage> {
                                         horizontal: 15, vertical: 10),
                                     child: MySearch(
                                       onChanged: (searchText) {
-                                        searchText =
-                                            searchText.toLowerCase();
-                                        setState(() {
-                                          _produtosDisplay =
-                                              _produtos.where((u) {
-                                                var nome = u.nome.toLowerCase();
-                                                return nome
-                                                    .contains(searchText);
-                                              }).toList();
-                                        });
+                                        searchText = searchText.toLowerCase();
+                                        if(mounted){
+                                          setState(() {
+                                            _produtosDisplay =
+                                                _produtos.where((u) {
+                                                  var nome = u.nome.toLowerCase();
+                                                  return nome.contains(searchText);
+                                                }).toList();
+                                          });
+                                        }
                                       },
                                     ),
                                   ),
@@ -139,7 +140,13 @@ class _VendaPageState extends State<VendaPage> {
                                       Flexible(
                                         fit: FlexFit.loose,
                                         child: SizedBox(
-                                          height: MediaQuery.of(context).size.height - (MediaQuery.of(context).size.height * 0.35),
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height -
+                                              (MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.35),
                                           child: ProdutosGridview(
                                             produtosDisplay: _produtosDisplay,
                                           ),
@@ -158,8 +165,14 @@ class _VendaPageState extends State<VendaPage> {
                                           child: ActionButton(
                                             label: "ADICIONAR ITEM",
                                             onPressed: () {
-                                              if(Provider.of<CarrinhoController>(context, listen: false).produtos.isNotEmpty){
-                                                Navigator.pushNamed(context, "/carrinho");
+                                              if (Provider.of<
+                                                  CarrinhoController>(
+                                                  context,
+                                                  listen: false)
+                                                  .produtos
+                                                  .isNotEmpty) {
+                                                Navigator.pushNamed(
+                                                    context, "/carrinho");
                                               }
                                             },
                                             icon: Icons.add,
