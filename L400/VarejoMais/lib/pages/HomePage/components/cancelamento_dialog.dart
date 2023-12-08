@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
 
-import '../../../data/controllers/pixController.dart';
-
 class DialogCancelamento {
   final platformChannel = PlatformChannel();
 

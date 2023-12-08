@@ -31,7 +31,8 @@ class AlertDialogVenda{
                       child: ElevatedButton(
                         onPressed: () {
                           carrinho.produtos.clear();
-                          Navigator.of(context).pushReplacementNamed("/venda");
+                          carrinho.zerarQuantidades();
+                          Navigator.popUntil(context, ModalRoute.withName('/venda'));
                         },
                         style: const ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll(

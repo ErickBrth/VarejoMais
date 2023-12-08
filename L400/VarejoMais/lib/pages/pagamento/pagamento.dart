@@ -11,7 +11,6 @@ class Pagamento extends StatefulWidget {
   final double totalCompra;
   final PagamentoController pagamentoController;
 
-
   @override
   State<Pagamento> createState() => _PagamentoState();
 }

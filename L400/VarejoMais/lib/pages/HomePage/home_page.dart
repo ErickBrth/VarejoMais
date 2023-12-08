@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varejoMais/data/controllers/carrinho_controller.dart';
+import 'package:varejoMais/pages/HomePage/components/suporte.dart';
 import 'package:varejoMais/shared/components/action_button.dart';
 import 'package:varejoMais/shared/components/home_page_button.dart';
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
@@ -78,8 +79,8 @@ class HomePage extends StatelessWidget{
                                           padding: EdgeInsets.only(left: 10)),
                                       HomeButton(
                                           onPressed: () {
-                                            Navigator.of(context)
-                                                .pushNamed('/estoque');
+                                            // Navigator.of(context)
+                                            //     .pushNamed('/estoque');
                                           },
                                           icon: Icons.smartphone,
                                           label: "Resgate PDV"),
@@ -95,8 +96,6 @@ class HomePage extends StatelessWidget{
                                     children: [
                                       HomeButton(
                                           onPressed: () {
-                                            // Navigator.of(context)
-                                            //     .pushReplacementNamed('/');
                                           },
                                           icon: Icons.settings,
                                           label: "Configurações"),
@@ -104,7 +103,6 @@ class HomePage extends StatelessWidget{
                               ]),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            //crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -121,14 +119,55 @@ class HomePage extends StatelessWidget{
                                   icon: Icons.sync,
                                 ),
                               ),
-                              Image.asset(
-                                'assets/images/DataPayLogo.png',
-                                width: 121,
-                                height: 30,
-                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    flex: 2,
+                                    child: Container(
+                                      //color: Colors.greenAccent,
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      child: Image.asset(
+                                        'assets/images/DataPayLogo.png',
+                                        width: 121,
+                                        height: 30,
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      //color: Colors.red,
+                                      alignment: AlignmentDirectional.centerEnd,
+                                      padding:  const EdgeInsetsDirectional.only(end: 10),
+                                      child: Column(
+                                        children: [
+                                          FloatingActionButton(
+                                            backgroundColor: const Color.fromRGBO(248, 67, 21, 1.0),
+                                              child: const Icon(Icons.support_agent_outlined,size: 40),
+                                              onPressed: () {
+                                              Suporte().showSuporteDialog(context);
+                                          }),
+                                          const SizedBox(height: 5),
+                                          const Text(
+                                            "SUPORTE",
+                                            style: TextStyle(
+                                              color: Color.fromRGBO(248, 67, 21, 1.0),
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w800,
+                                              fontFamily: "Arista-Pro-Bold-trial",
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
+                              )
+
                               //const Padding(padding: EdgeInsets.only(bottom: 40)),
                             ],
-                          )
+                          ),
                         ]),
                   ),
                 ),
