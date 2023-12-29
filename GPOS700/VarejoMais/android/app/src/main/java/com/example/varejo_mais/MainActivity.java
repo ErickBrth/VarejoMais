@@ -236,10 +236,6 @@ public class MainActivity extends FlutterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         redePayments = RedePayments.getInstance(this);
-        setTitle(getString(R.string.app_name) + " v" + BuildConfig.VERSION_NAME);
-        GeneratedPluginRegistrant.registerWith(new FlutterEngine(this));
-
-
     }
 
     //crédito parcelado sem juros

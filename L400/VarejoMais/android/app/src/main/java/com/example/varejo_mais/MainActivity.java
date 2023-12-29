@@ -1,5 +1,12 @@
 package com.example.varejo_mais;
 
+
+import br.com.positivo.api.cipurse.Cipurse;
+import br.com.positivo.api.installer.Installer;
+import br.com.positivo.api.mifare.Mifare;
+import br.com.positivo.api.network.Network;
+import br.com.positivo.api.settings.Settings;
+import br.com.positivo.lib.provider.PositivoDeviceProvider;
 import io.flutter.embedding.android.FlutterActivity;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -8,10 +15,9 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 
 import java.math.BigDecimal;
@@ -20,7 +26,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.Locale;
 
-import io.flutter.plugins.GeneratedPluginRegistrant;
 import rede.smartrede.sdk.Payment;
 import rede.smartrede.sdk.PaymentStatus;
 import rede.smartrede.sdk.Receipt;
@@ -52,18 +57,46 @@ public class MainActivity extends FlutterActivity {
 
     private RedePayments redePayments;
 
+    FlexTipoPagamento flexTipoPagamento;
+
+    PositivoDeviceProvider positivoDeviceProvider = new PositivoDeviceProvider();
+    Cipurse cipurse;
+    Installer installer;
+    Mifare mifare;
+    Network mNetwork;
+    Settings mSettings;
+
+    public void initialize(Context context) {
+        if (context != null) {
+            mifare = positivoDeviceProvider.getMifare(context);
+            installer = positivoDeviceProvider.getInstaller(context);
+            cipurse =  positivoDeviceProvider.getCipurse(context);
+            if (cipurse != null) {
+                mNetwork = positivoDeviceProvider.getNetwork(context);
+                mSettings = positivoDeviceProvider.getSettings(context);
+                if (mNetwork != null) {
+//                    String[] imeiNumbers = mNetwork.getIMEINumber();
+//                    if (imeiNumbers != null && imeiNumbers.length > 0) {
+//                        String[] imei = imeiNumbers; // IMEI
+//                    }
+                }
+                if (mSettings != null) {
+                   // String serialNumber = mSettings.serialNumberDevice(); // Número de série
+                }
+            }
+        }
+    }
+
+
+
     private static final DecimalFormat moneyFormat = new DecimalFormat(MONEY_PATTERN,
             DecimalFormatSymbols.getInstance(new Locale("pt", "BR")));
 
     private final String CHANNEL = "unique.identifier.method/hello";
     private final String CHANNEL1 = "unique.identifier.method/getLongAmount";
-
-
     private final String CREDITO_PARCELADO = "unique.identifier.method/creditoParcelado";
-
     private final String REPRINT = "unique.identifier.method/reprint";
-    //private final String CREDITO_PARCELADO_EMISSOR = "unique.identifier.method/creditoParceladoEmissor";
-    private final String CREDITO_A_VISTA = "unique.identifier.method/creditoVista";
+    private final String VISTA = "unique.identifier.method/creditoVista";
     private final String CARTAO_DEBITO = "unique.identifier.method/debito";
     private final String VOUCHER = "unique.identifier.method/voucher";
     private final String REVERSAL = "unique.identifier.method/estorno";
@@ -81,6 +114,7 @@ public class MainActivity extends FlutterActivity {
         reprint.setMethodCallHandler((call, result) -> {
 
             if(call.method.equals("reprint")){
+//                initialize();
                 result.success(reprint());
             }else{
                 result.notImplemented();
@@ -95,11 +129,8 @@ public class MainActivity extends FlutterActivity {
                 HashMap args = (HashMap) call.arguments;
                 double valor = (double) args.get("valor");
                 int parcelas = (int) args.get("parcelas");
-                paymentStatusCallback = new PaymentStatusCallback() {
-                    @Override
-                    public void onPaymentStatusReceived(String paymentStatus) {
-                        result.success(paymentStatus);
-                    }
+                paymentStatusCallback = paymentStatus -> {
+                    result.success(paymentStatus);
                 };
                   creditoParcelado(valor,parcelas);
             }else{
@@ -107,17 +138,12 @@ public class MainActivity extends FlutterActivity {
             }
         });
 
-        MethodChannel creditoVista = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CREDITO_A_VISTA);
+        MethodChannel creditoVista = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), VISTA);
         creditoVista.setMethodCallHandler((call, result) -> {
 
             if(call.method.equals("creditoVista")){
                 double valor = call.argument("valor");
-                paymentStatusCallback = new PaymentStatusCallback() {
-                    @Override
-                    public void onPaymentStatusReceived(String paymentStatus) {
-                        result.success(paymentStatus);
-                    }
-                };
+                paymentStatusCallback = result::success;
                 creditoVista(valor);
             }else{
                 result.notImplemented();
@@ -166,11 +192,8 @@ public class MainActivity extends FlutterActivity {
 
             if(call.method.equals("pix")){
                 double valor = call.argument("valor");
-                paymentStatusCallback = new PaymentStatusCallback() {
-                    @Override
-                    public void onPaymentStatusReceived(String paymentStatus) {
-                        result.success(paymentStatus);
-                    }
+                paymentStatusCallback = paymentStatus -> {
+                    result.success(paymentStatus);
                 };
                 pix(valor);
             }else{
@@ -179,6 +202,7 @@ public class MainActivity extends FlutterActivity {
         });
 
     }
+
     public String reprint(){
         onReprint();
         return "printa";
@@ -218,28 +242,27 @@ public class MainActivity extends FlutterActivity {
 
 
 
-
-    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle args = intent.getExtras();
-            String s = args.getString("PVNumber");
-            if (PVNumberText != null) {
-                PVNumberText.setText(s);
-            }
-        }
-    };
+//    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            Bundle args = intent.getExtras();
+//            String s = args.getString("PVNumber");
+//            if (PVNumberText != null) {
+//                PVNumberText.setText(s);
+//            }
+//        }
+//    };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         redePayments = RedePayments.getInstance(this);
-        setTitle(getString(R.string.app_name) + " v" + BuildConfig.VERSION_NAME);
-        GeneratedPluginRegistrant.registerWith(new FlutterEngine(this));
 
-
+        Log.d(TAG, "Resultado: " + FlexTipoPagamento.CREDITO_A_VISTA);
+//        initialize(this);
+//        setTitle(getString(R.string.app_name) + " v" + BuildConfig.VERSION_NAME);
     }
 
     //crédito parcelado sem juros
@@ -340,17 +363,17 @@ public class MainActivity extends FlutterActivity {
 //        //rl.setVisibility(View.GONE);
 //    }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        registerReceiver(mBroadcastReceiver, new IntentFilter("br.com.mobilerede.GetPVNumber"));
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        unregisterReceiver(mBroadcastReceiver);
-    }
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        registerReceiver(mBroadcastReceiver, new IntentFilter("br.com.mobilerede.GetPVNumber"));
+//    }
+//
+//    @Override
+//    public void onPause(){
+//        super.onPause();
+//        unregisterReceiver(mBroadcastReceiver);
+//    }
 
     public void onReprint() {
         //hideReceipt();
@@ -452,7 +475,7 @@ public class MainActivity extends FlutterActivity {
     }
 
 //    private String showReceipt(Receipt receipt){
-//        //todo
+//
 //        String result ="";
 //        result += "CNPJ: "+ receipt.getCNPJ() +
 //                " ///nome da loja: "+ receipt.getStoreName() +

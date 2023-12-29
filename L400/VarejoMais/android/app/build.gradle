@@ -25,6 +25,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "com.example.varejo_mais"
     compileSdkVersion 33
@@ -36,7 +42,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.varejo_mais"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
@@ -46,21 +51,83 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        android.buildTypes.debug.signingConfig = null
+        android.buildTypes.release.signingConfig = null
+
+        gpos700 {
+            // Dev signature for GPOS700 terminals
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+
+        l400 {
+
+        }
+
+
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
+//            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.debug
+        }
+    }
+
+    flavorDimensions "model"
+
+    productFlavors {
+        gpos700 {
+            dimension "model"
+            versionNameSuffix '-Gpos700'
+            applicationIdSuffix = ".gpos700"
+            signingConfig signingConfigs.gpos700
+        }
+
+        l400 {
+            dimension "model"
+            minSdkVersion 22
+            versionNameSuffix "-L400"
+            applicationIdSuffix = ".l400"
             signingConfig signingConfigs.debug
         }
     }
+
+    ext.configSigningKey = { android, signingConfigs ->
+        def flavor = getGradle().getStartParameter().getTaskRequests().toString()
+        if (flavor.contains("gpos700")) {
+            android.buildTypes.debug.signingConfig signingConfigs.gpos700
+            android.buildTypes.release.signingConfig signingConfigs.gpos700
+        } else if (flavor.contains("l400")) {
+            android.buildTypes.debug.signingConfig signingConfigs.l400
+            android.buildTypes.release.signingConfig signingConfigs.l400
+        }
+
+//        println "Usando signingConfig $android.buildTypes.debug.signingConfig"
+    }
+
+    configSigningKey(android, signingConfigs)
 }
 
 flutter {
     source '../..'
 }
 
-dependencies{
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 
+dependencies{
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation fileTree(dir: 'libs', include: ['*.aar'])
+
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 }

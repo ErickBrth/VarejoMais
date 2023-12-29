@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Login{
-  String id = "";
+  String idUsuario = "";
   String idEmpresa = "";
 
   Future<void> storeToken(String token) async {
@@ -25,7 +25,6 @@ class Login{
   Future<void> storeIdEmpresa(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('idEmpresa', token);
-
   }
 
   Future<bool> login(String email, String senha) async {
@@ -45,9 +44,9 @@ class Login{
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
 
-        id = data['result'][0]['id'].toString(); //id do usuario
+        idUsuario = data['result'][0]['id'].toString(); //id do usuario
         idEmpresa = data['result'][0]['empresa'].toString();
-        await storeToken(id);
+        await storeToken(idUsuario);
         await storeIdEmpresa(idEmpresa);
         return true;
       } else {

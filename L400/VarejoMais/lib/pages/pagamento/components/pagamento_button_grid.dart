@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:varejoMais/data/controllers/carrinho_controller.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
-import 'package:varejoMais/pages/pagamento/components/alert_dialog_pix.dart';
+import 'package:varejoMais/data/models/produto_model.dart';
+import 'package:varejoMais/pages/pagamento/pix/alert_dialog_pix.dart';
 import 'package:varejoMais/shared/components/pagamento_button.dart';
 import 'package:varejoMais/shared/components/show_dialog_price/dialog_price.dart';
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
@@ -12,7 +15,6 @@ class ButtonGrid extends StatefulWidget {
 
   final double totalVenda;
   final PagamentoController pagamentoController;
-
   @override
   State<ButtonGrid> createState() => _ButtonGridState();
 }
@@ -26,8 +28,21 @@ class _ButtonGridState extends State<ButtonGrid> {
   double valorTotalPago = 0.0;
   PixController pixController = PixController();
 
+  late NavigatorState _navigator;
+
+  @override
+  void didChangeDependencies() {
+  super.didChangeDependencies();
+  _navigator = Navigator.of(context);
+  }
+
+  void vendaFinalizada() {
+  _navigator.pushReplacementNamed('/vendaFinalizada');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final produtosCarrinho = Provider.of<CarrinhoController>(context).produtos;
     return WillPopScope(
       //impede de voltar a pagina com o botão do android
       onWillPop: () async {
@@ -52,7 +67,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                   label: "Cartão Crédito",
                   onPressed: () {
                     setState(() {
-                      mostrarAlertDialog(valor);
+                      mostrarAlertDialog(valor, produtosCarrinho);
                     });
                   },
                 ),
@@ -67,17 +82,19 @@ class _ButtonGridState extends State<ButtonGrid> {
                     if (valorAPagar > 0.0) {
                       result = await platformChannel.debito(valorAPagar);
                       if (result == "ok!") {
-                        double valorRestante = double.parse(widget
-                            .pagamentoController.valorRestate.value
-                            .toStringAsFixed(2));
-                        widget.pagamentoController
-                            .calculaValorRestante(valorAPagar, valorRestante);
-                        valorRestante = double.parse(widget
-                            .pagamentoController.valorRestate.value
-                            .toStringAsFixed(2));
-                        if (valorRestante == 0.0) {
-                          Navigator.pushReplacementNamed(
-                              context, '/vendaFinalizada');
+                        String retorno = await widget.pagamentoController.registraPagamento("DEBITO", produtosCarrinho, valorAPagar);
+                        if(retorno == "ok!"){
+                          double valorRestante = double.parse(widget
+                              .pagamentoController.valorRestate.value
+                              .toStringAsFixed(2));
+                          widget.pagamentoController
+                              .calculaValorRestante(valorAPagar, valorRestante);
+                          valorRestante = double.parse(widget
+                              .pagamentoController.valorRestate.value
+                              .toStringAsFixed(2));
+                          if (valorRestante == 0.0) {
+                            vendaFinalizada();
+                          }
                         }
                       }
                     }
@@ -86,8 +103,28 @@ class _ButtonGridState extends State<ButtonGrid> {
                 PagamentoButton(
                   icon: Icons.monetization_on_outlined,
                   label: "Dinheiro",
-                  onPressed: () {
-
+                  onPressed: () async {
+                    valorAPagar =
+                        (await DialogPrice().showInputDialog(context, valor))!;
+                    valorTotalPago = valor;
+                    String result = "";
+                    if (valorAPagar > 0.0) {
+                    result = await widget.pagamentoController.registraPagamento("DINHEIRO", produtosCarrinho, valorAPagar);
+                    if (result == "ok!") {
+                    double valorRestante = double.parse(widget
+                        .pagamentoController.valorRestate.value
+                        .toStringAsFixed(2));
+                    widget.pagamentoController
+                        .calculaValorRestante(valorAPagar, valorRestante);
+                    valorRestante = double.parse(widget
+                        .pagamentoController.valorRestate.value
+                        .toStringAsFixed(2));
+                    if (valorRestante == 0.0) {
+                    Navigator.pushReplacementNamed(
+                    context, '/vendaFinalizada');
+                    }
+                    }
+                    }
                   },
                 ),
                 PagamentoButton(
@@ -100,7 +137,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                         valorAPagar,
                         valorTotalPago,
                         widget.pagamentoController,
-                        widget.totalVenda);
+                        widget.totalVenda, produtosCarrinho);
                   },
                 ),
               ],
@@ -109,7 +146,7 @@ class _ButtonGridState extends State<ButtonGrid> {
     );
   }
 
-  void mostrarAlertDialog(double valor) {
+  void mostrarAlertDialog(double valor, Map<ProdutoModel, int> produtosCarrinho) {
     showDialog(
       context: context,
       builder: (context) {
@@ -140,6 +177,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                           result = await platformChannel.creditoVista(valorAPagar);
                           Navigator.of(context).pop();
                           if (result == "ok!") {
+                            await widget.pagamentoController.registraPagamento("PIX REDE", produtosCarrinho, valorAPagar);
                             double valorRestante = double.parse(widget
                                 .pagamentoController.valorRestate.value
                                 .toStringAsFixed(2));
@@ -149,8 +187,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                                 .pagamentoController.valorRestate.value
                                 .toStringAsFixed(2));
                             if (valorRestante == 0.0) {
-                              Navigator.pushReplacementNamed(
-                                  context, '/vendaFinalizada');
+                                vendaFinalizada();
                             }
                           }
                         }
@@ -190,7 +227,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                         setState(() {
                           //Navigator.of(context).pop();
                           digitarNumeroParcelas(
-                              widget.totalVenda, parcelas, valor);
+                              widget.totalVenda, parcelas, valor, produtosCarrinho);
                         });
                       },
                       style: const ButtonStyle(
@@ -228,7 +265,7 @@ class _ButtonGridState extends State<ButtonGrid> {
     );
   }
 
-  void digitarNumeroParcelas(double totalVenda, int parcelas, double valor) {
+  void digitarNumeroParcelas(double totalVenda, int parcelas, double valor, Map<ProdutoModel, int> produtosCarrinho) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -310,6 +347,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
                               if (result == "ok!") {
+                                await widget.pagamentoController.registraPagamento("PIX REDE", produtosCarrinho, valorAPagar);
                                 double valorRestante = double.parse(widget
                                     .pagamentoController.valorRestate.value
                                     .toStringAsFixed(2));

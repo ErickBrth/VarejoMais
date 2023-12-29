@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:varejoMais/data/http/exceptions.dart';
 import 'package:varejoMais/data/models/pix_model.dart';
 
@@ -19,16 +19,36 @@ class PixController implements IPixController {
   Timer? _timer;
   Timer? _maxTimer;
   String clientId = "3W4d6Z3XNniP2Sp8UoI4OoKwh910bdXzcrkHv4Tc5dFGCnQ2TprAsRQ2kK4wExQmcptlEMG73tghIS67dneIHJcQ2262uTAn_VeQpplpnAe1bvrU8UL3h0jUt3Mp7h2SlhyglVq3jj6jos66FlsJYI7cba12cBq_42YAS14rHTY";
-
+  String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDI0MDQ3NjUsIm5iZiI6MTcwMjQwNDc2NSwianRpIjoiODFkY2ZlYjQtNjFhZi00ODU1LWJhMWMtYmZjYTNmNTc1Y2E0IiwiZXhwIjoxNzA0OTk2NzY1LCJpZGVudGl0eSI6eyJhdXRoX3R5cGUiOiJjbGllbnQiLCJjdXN0b21lcl9pZCI6NTk4MCwic3RvcmVfcG9zX2lkIjoxNjY2NH0sInR5cGUiOiJyZWZyZXNoIn0.BDaysTp0P6XCO-FIoyqonC_plauyhgt3wqKgotGM1BI";
   get getPixStatus => pixStatus.value;
+  
 
+  Future<List<String>> getWallets() async{
+    var apiUrl = Uri.parse("https://api-conexaoitau.shipay.com.br/v1/wallets");
+
+    var response = await http.get(
+      apiUrl,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      }
+    );
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      List<String> minhaLista = List<String>.from(jsonDecode(body));
+      return minhaLista;
+    } else {
+      throw NotFoundException("Não foi possível carregar o Qr code Pix");
+    }
+  }
 
   Future<dynamic> _getPix(String valor) async {
     String apiUrl =
         "https://pix.datapaytecnologia.com.br/api/client/orders/qrcode";
 
     double? valorStr = double.tryParse(valor);
-    final Map<String, dynamic?> requestBody = {
+
+    final Map<String, dynamic> requestBody = {
       "client_id": clientId,
       "item_title": "",
       "total": valorStr,
@@ -60,7 +80,7 @@ class PixController implements IPixController {
     String apiUrl =
         "https://pix.datapaytecnologia.com.br/api/client/orders/order/$id";
 
-    final Map<String, dynamic?> requestBody = {
+    final Map<String, dynamic> requestBody = {
       "client_id": clientId,
     };
 
@@ -88,7 +108,7 @@ class PixController implements IPixController {
     String apiUrl =
         "https://pix.datapaytecnologia.com.br/api/client/orders/orders";
 
-    final Map<String, dynamic?> requestBody = {
+    final Map<String, dynamic > requestBody = {
       "client_id": clientId,
     };
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
-import 'package:varejoMais/pages/pagamento/components/pix_datapay.dart';
+import 'package:varejoMais/data/models/produto_model.dart';
+import 'package:varejoMais/pages/pagamento/pix/pix_datapay.dart';
+
 import 'package:varejoMais/shared/components/show_dialog_price/dialog_price.dart';
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
 
@@ -15,7 +17,7 @@ class DialogPix {
       double valorAPagar,
       double valorTotalPago,
       PagamentoController pagamentoController,
-      double totalVenda) async {
+      double totalVenda, Map<ProdutoModel, int> produtosCarrinho) async {
     await showDialog(
         context: context,
         builder: (context) {
@@ -38,34 +40,24 @@ class DialogPix {
                     Flexible(
                       child: ElevatedButton(
                         onPressed: () async {
-                          valorAPagar = (await DialogPrice()
-                              .showInputDialog(context, valor))!;
+                          valorAPagar =
+                          (await DialogPrice().showInputDialog(context, valor))!;
                           valorTotalPago = valor;
                           String result = "";
                           if (valorAPagar > 0.0) {
-                            if (valorAPagar == valorTotalPago) {
-                              result = await platformChannel.pix(valorAPagar);
-                              if (result == "ok!") {
-                                pagamentoController.calculaValorRestante(
-                                    valorAPagar, totalVenda);
-                                Navigator.pushReplacementNamed(
+                            result = await platformChannel.pix(valorAPagar);
+                            if (result == "ok!") {
+                              await pagamentoController.registraPagamento("PIX REDE", produtosCarrinho, valorAPagar);
+                              double valorRestante = double.parse(pagamentoController.valorRestate.value
+                                  .toStringAsFixed(2));
+                              pagamentoController
+                                  .calculaValorRestante(valorAPagar, valorRestante);
+                              valorRestante = double.parse(
+                                  pagamentoController.valorRestate.value
+                                  .toStringAsFixed(2));
+                              if (valorRestante == 0.0) {
+                                Navigator.pushNamed(
                                     context, '/vendaFinalizada');
-                              }
-                            } else {
-                              while (valorTotalPago > valorAPagar) {
-                                if (valorAPagar > 0) {
-                                  result =
-                                      await platformChannel.pix(valorAPagar);
-                                  if (result == "ok!") {
-                                    pagamentoController.calculaValorRestante(
-                                        valorAPagar, totalVenda);
-                                    Navigator.of(context).pop();
-                                    break;
-                                  } else {
-                                    Navigator.of(context).pop();
-                                    break;
-                                  }
-                                }
                               }
                             }
                           }
@@ -115,11 +107,13 @@ class DialogPix {
                                 MaterialPageRoute(
                                     builder: (context) => QrCodePix(
                                       valorAPagar: valorAPagar,
-                                      pagamentoController:
-                                      pagamentoController,
-                                      pixController: pixController,
-                                      valorTotalPago: valorTotalPago,
-                                    )));
+                                          pagamentoController:
+                                              pagamentoController,
+                                          pixController: pixController,
+                                          valorTotalPago: valorTotalPago,
+                                          itens: produtosCarrinho,
+                                        ))
+                            );
                           }
                         },
                         style: const ButtonStyle(

@@ -66,7 +66,6 @@ class DialogCancelamento {
                         onPressed: () async {
                           Navigator.of(context).pop();
                           Navigator.of(context).pushNamed('/cancelamento');
-
                         },
                         style: const ButtonStyle(
                             backgroundColor:

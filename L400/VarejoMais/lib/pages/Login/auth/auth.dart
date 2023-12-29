@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varejoMais/pages/HomePage/components/cancelamento_dialog.dart';
+import 'package:varejoMais/pages/HomePage/home_page.dart';
 
 import '../login/login.dart';
 
@@ -82,7 +83,12 @@ class AuthPage extends StatelessWidget {
                                 currentFocus.unfocus();
                               }
                               if (loginState) {
-                                Navigator.of(context).pushReplacementNamed('/home');
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                      (route) => false,
+                                );
                                 DialogCancelamento().showCancelamentoDialog(context);
                               } else {
                                 passwordController.clear();

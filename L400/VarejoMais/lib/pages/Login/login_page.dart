@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:varejoMais/pages/HomePage/home_page.dart';
 import 'package:varejoMais/pages/Login/login/login.dart';
 
 class LoginPage extends StatefulWidget {

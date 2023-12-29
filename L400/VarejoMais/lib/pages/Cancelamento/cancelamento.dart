@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
 import 'package:varejoMais/data/models/pix_model.dart';
+import 'package:varejoMais/pages/HomePage/home_page.dart';
 import 'package:varejoMais/shared/components/app_bar.dart';
 import 'package:varejoMais/shared/components/loading.dart';
 
@@ -120,8 +121,12 @@ class _CancelamentoState extends State<Cancelamento> {
                                     if(status == "refund_pending"){
                                       showCustomSnackbar('$message');
                                       await Future.delayed(const Duration(seconds: 1));
-                                      Navigator.of(context)
-                                          .pushNamed('/home');
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()),
+                                            (route) => false,
+                                      );
                                     }
                                   },
                                   style: const ButtonStyle(
