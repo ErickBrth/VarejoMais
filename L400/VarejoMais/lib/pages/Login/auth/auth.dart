@@ -1,8 +1,6 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varejoMais/pages/HomePage/components/cancelamento_dialog.dart';
 import 'package:varejoMais/pages/HomePage/home_page.dart';
 
@@ -17,6 +15,7 @@ class AuthPage extends StatelessWidget {
 
     final _formKey = GlobalKey<FormState>();
 
+//todo ajustar tela de login para cancelamento(igual a tela de login)
     return Material(
       child: SafeArea(
         child: Scaffold(

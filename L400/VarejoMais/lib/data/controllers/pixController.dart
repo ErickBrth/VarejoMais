@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -23,24 +22,24 @@ class PixController implements IPixController {
   get getPixStatus => pixStatus.value;
   
 
-  Future<List<String>> getWallets() async{
-    var apiUrl = Uri.parse("https://api-conexaoitau.shipay.com.br/v1/wallets");
-
-    var response = await http.get(
-      apiUrl,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      }
-    );
-    if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      List<String> minhaLista = List<String>.from(jsonDecode(body));
-      return minhaLista;
-    } else {
-      throw NotFoundException("Não foi possível carregar o Qr code Pix");
-    }
-  }
+  // Future<List<String>> getWallets() async{
+  //   var apiUrl = Uri.parse("https://api-conexaoitau.shipay.com.br/v1/wallets");
+  //
+  //   var response = await http.get(
+  //     apiUrl,
+  //     headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Content-Type': 'application/json',
+  //     }
+  //   );
+  //   if (response.statusCode == 200) {
+  //     final body = jsonDecode(response.body);
+  //     List<String> minhaLista = List<String>.from(jsonDecode(body));
+  //     return minhaLista;
+  //   } else {
+  //     throw NotFoundException("Não foi possível carregar o Qr code Pix");
+  //   }
+  // }
 
   Future<dynamic> _getPix(String valor) async {
     String apiUrl =
@@ -65,7 +64,6 @@ class PixController implements IPixController {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
-
       return body;
     } else if (response.statusCode == 404) {
       stopCheckingStatus();

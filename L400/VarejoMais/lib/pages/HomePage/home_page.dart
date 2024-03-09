@@ -152,7 +152,7 @@ class HomePage extends StatelessWidget{
                                 children: [
                                   FloatingActionButton(
                                       backgroundColor: const Color.fromRGBO(248, 67, 21, 1.0),
-                                      child: const Icon(Icons.support_agent_outlined,size: 40),
+                                      child: const Icon(Icons.support_agent_outlined,size: 40, color: Colors.white,),
                                       onPressed: () {
                                         Suporte().showSuporteDialog(context);
                                       }),
