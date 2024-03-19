@@ -15,6 +15,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;

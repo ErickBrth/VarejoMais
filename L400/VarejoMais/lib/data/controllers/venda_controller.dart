@@ -13,7 +13,7 @@ class VendaController {
     String? idPedido = prefs.getString('idPedido');
 
     String apiUrl =
-        "https://datapaytecnologia.com.br/erp/apiErp/vendas/cancelar.php";
+        "https://ovarejomais.com.br/erp/apiErp/vendas/cancelar.php";
 
     final Map<String, dynamic> requestBody = {
       "client_id": clientId,

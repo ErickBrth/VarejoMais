@@ -62,17 +62,24 @@ class DialogPix {
                             }
                           }
                         },
-                        style: const ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
+                        style: ButtonStyle(
+                          backgroundColor: const MaterialStatePropertyAll(
                               Color.fromRGBO(248, 67, 21, 1.0)),
                           minimumSize:
-                              MaterialStatePropertyAll(Size.fromHeight(75)),
+                              const MaterialStatePropertyAll(Size.fromHeight(75)),
+                          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
                         ),
                         child: const Column(
                           children: [
                             Icon(
                               Icons.payments_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
                             SizedBox(
                               width: 10,
@@ -81,7 +88,8 @@ class DialogPix {
                               'Pix Rede',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 18,
+                                color: Colors.white,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",
                               ),
@@ -116,17 +124,24 @@ class DialogPix {
                             );
                           }
                         },
-                        style: const ButtonStyle(
+                        style: ButtonStyle(
                           backgroundColor:
-                              MaterialStatePropertyAll(Colors.blueAccent),
+                              const MaterialStatePropertyAll(Colors.blueAccent),
                           minimumSize:
-                              MaterialStatePropertyAll(Size.fromHeight(75)),
+                              const MaterialStatePropertyAll(Size.fromHeight(75)),
+                          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
                         ),
                         child: const Column(
                           children: [
                             Icon(
                               Icons.monetization_on,
                               size: 45,
+                              color: Colors.white,
                             ),
                             SizedBox(
                               width: 10,
@@ -135,6 +150,7 @@ class DialogPix {
                               'Pix DataPay',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",

@@ -39,7 +39,7 @@ class PagamentoController{
     });
 
     String apiUrl =
-        'https://datapaytecnologia.com.br/erp/apiErp/vendas/salvar.php';
+        'https://ovarejomais.com.br/erp/apiErp/vendas/salvar.php';
 
     final Map<String, dynamic> requestBody = {
       "id_usuario":idUsuario,

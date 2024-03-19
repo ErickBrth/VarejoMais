@@ -18,6 +18,6 @@ class ProdutoModel {
         nome: map["nome"],
         valor_venda: map["valor_venda"],
         imagem: map["foto"],
-        estoque: map["estoque"]);
+        estoque: map["estoque"]?? "0");
   }
 }

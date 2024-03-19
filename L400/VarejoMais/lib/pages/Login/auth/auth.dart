@@ -15,7 +15,6 @@ class AuthPage extends StatelessWidget {
 
     final _formKey = GlobalKey<FormState>();
 
-//todo ajustar tela de login para cancelamento(igual a tela de login)
     return Material(
       child: SafeArea(
         child: Scaffold(
@@ -57,7 +56,7 @@ class AuthPage extends StatelessWidget {
                       //password
                       TextFormField(
                         controller: passwordController,
-                        keyboardType: const TextInputType.numberWithOptions(),
+                        keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -99,7 +98,11 @@ class AuthPage extends StatelessWidget {
                           style: const ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
                                   Color.fromRGBO(248, 67, 21, 1.0))),
-                          child: const Text("Entrar")),
+                          child: const Text(
+                              "Entrar",
+                            style: TextStyle(color: Colors.white,fontSize: 20),
+                          )
+                      ),
                     ]),
               ),
             ),

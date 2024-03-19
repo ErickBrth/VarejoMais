@@ -123,6 +123,8 @@ class HomePage extends StatelessWidget{
                               bool saiu = await sair();
                               if (saiu) {
                                 carrinho.produtos.clear();
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                prefs.clear();
                                 Navigator.of(context).pushReplacementNamed("/");
                               }
                             },
@@ -156,7 +158,7 @@ class HomePage extends StatelessWidget{
                                       onPressed: () {
                                         Suporte().showSuporteDialog(context);
                                       }),
-                                  const SizedBox(height: 5),
+                                  //const SizedBox(height: 5),
                                   const Text(
                                     "SUPORTE",
                                     style: TextStyle(
@@ -166,7 +168,7 @@ class HomePage extends StatelessWidget{
                                       fontFamily: "Arista-Pro-Bold-trial",
                                     ),
                                   ),
-                                  const SizedBox(height: 10),
+                                  // const SizedBox(height: 10),
                                 ],
                               ),
                             ),

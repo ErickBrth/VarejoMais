@@ -51,7 +51,7 @@ class DialogPrice {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(width: 10),
+                // const SizedBox(width: 10),
                 Expanded(
                   child: TextButton(
                     style: const ButtonStyle(
@@ -74,7 +74,7 @@ class DialogPrice {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextButton(
                     style: const ButtonStyle(

@@ -31,7 +31,7 @@ class Login{
     try {
       Response response = await post(
         Uri.parse(
-            "https://www.datapaytecnologia.com.br/erp/apiErp/login/login.php"),
+            "https://ovarejomais.com.br/erp/apiErp/login/login.php"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

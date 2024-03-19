@@ -48,15 +48,13 @@ class _VendaPageState extends State<VendaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Material(
         child: SafeArea(
           child: Scaffold(
             appBar: const PreferredSize(
-              preferredSize: Size.fromHeight(70),
+              preferredSize: Size.fromHeight(55),
               child: App_Bar(
                 title: "Produtos",
                 leading: Icon(Icons.arrow_back),
@@ -87,16 +85,25 @@ class _VendaPageState extends State<VendaPage> {
                           }
 
                           if (store.erro.value.isNotEmpty) {
-                            return Center(
-                              child: Text(
-                                store.erro.value,
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Container(
+                                    alignment: AlignmentDirectional.center,
+                                    height: MediaQuery.of(context).size.height,
+                                    child: Text(
+                                      store.erro.value,
+                                      style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
+                              ],
                             );
                           }
 

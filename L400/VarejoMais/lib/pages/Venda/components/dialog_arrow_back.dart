@@ -43,6 +43,7 @@ class AlertDialogVenda{
                           'Sim',
                           textAlign: TextAlign.center,
                           style: TextStyle(
+                            color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                             fontFamily: "Arista-Pro-Bold-trial",
@@ -68,6 +69,7 @@ class AlertDialogVenda{
                           'Não',
                           textAlign: TextAlign.center,
                           style: TextStyle(
+                            color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                             fontFamily: "Arista-Pro-Bold-trial",

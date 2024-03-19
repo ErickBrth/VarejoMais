@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:varejoMais/data/controllers/carrinho_controller.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
 import 'package:varejoMais/data/models/produto_model.dart';
+import 'package:varejoMais/pages/pagamento/pagamento.dart';
 import 'package:varejoMais/pages/pagamento/pix/alert_dialog_pix.dart';
 import 'package:varejoMais/shared/components/pagamento_button.dart';
 import 'package:varejoMais/shared/components/show_dialog_price/dialog_price.dart';
@@ -43,11 +45,9 @@ class _ButtonGridState extends State<ButtonGrid> {
   @override
   Widget build(BuildContext context) {
     final produtosCarrinho = Provider.of<CarrinhoController>(context).produtos;
-    return WillPopScope(
+    return PopScope(
       //impede de voltar a pagina com o botão do android
-      onWillPop: () async {
-        return false;
-      },
+      canPop: false,
       child: ValueListenableBuilder(
           valueListenable: widget.pagamentoController.valorRestate,
           builder: (context, valor, child) {
@@ -166,7 +166,7 @@ class _ButtonGridState extends State<ButtonGrid> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: ElevatedButton(
                       onPressed: () async {
                         valorAPagar =
@@ -177,7 +177,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                           result = await platformChannel.creditoVista(valorAPagar);
                           Navigator.of(context).pop();
                           if (result == "ok!") {
-                            await widget.pagamentoController.registraPagamento("PIX REDE", produtosCarrinho, valorAPagar);
+                            await widget.pagamentoController.registraPagamento("CREDITO AVISTA", produtosCarrinho, valorAPagar);
                             double valorRestante = double.parse(widget
                                 .pagamentoController.valorRestate.value
                                 .toStringAsFixed(2));
@@ -192,15 +192,21 @@ class _ButtonGridState extends State<ButtonGrid> {
                           }
                         }
                       },
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                      style: ButtonStyle(
+                        backgroundColor: const MaterialStatePropertyAll(
                             Color.fromRGBO(248, 67, 21, 1.0)),
-                      ),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )
+                        ),
+                      ), 
                       child: const Column(
                         children: [
                           Icon(
                             Icons.payments_outlined,
                             size: 45,
+                            color: Colors.white,
                           ),
                           SizedBox(
                             width: 10,
@@ -209,7 +215,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                             'À Vista',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
+                              color: Colors.white,
                               fontWeight: FontWeight.w800,
                               fontFamily: "Arista-Pro-Bold-trial",
                             ),
@@ -219,7 +226,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                     ),
                   ),
                   const SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   Expanded(
                     child: ElevatedButton(
@@ -230,14 +237,21 @@ class _ButtonGridState extends State<ButtonGrid> {
                               widget.totalVenda, parcelas, valor, produtosCarrinho);
                         });
                       },
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                        backgroundColor: const MaterialStatePropertyAll(
                             Color.fromRGBO(248, 67, 21, 1.0)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                            )
+                        ),
                       ),
                       child: const Column(
                         children: [
                           Icon(
                             Icons.credit_card_rounded,
+                            color: Colors.white,
                             size: 45,
                           ),
                           SizedBox(
@@ -245,9 +259,11 @@ class _ButtonGridState extends State<ButtonGrid> {
                           ),
                           Text(
                             'Parcelado',
+                            softWrap: false,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
+                              color: Colors.white,
+                              fontSize: 16,
                               fontWeight: FontWeight.w800,
                               fontFamily: "Arista-Pro-Bold-trial",
                             ),
@@ -316,7 +332,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                         'Cancelar',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          color: Colors.white,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Arista-Pro-Bold-trial",
                         ),
@@ -344,8 +361,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                             String result = "";
                             if (valorAPagar > 0.0) {
                               result = await platformChannel.creditoParcelado(valorAPagar, parcelas);
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
                               if (result == "ok!") {
                                 await widget.pagamentoController.registraPagamento("PIX REDE", produtosCarrinho, valorAPagar);
                                 double valorRestante = double.parse(widget
@@ -356,9 +373,15 @@ class _ButtonGridState extends State<ButtonGrid> {
                                 valorRestante = double.parse(widget
                                     .pagamentoController.valorRestate.value
                                     .toStringAsFixed(2));
+                                if(mounted){
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                }
                                 if (valorRestante == 0.0) {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/vendaFinalizada');
+                                  if(mounted){
+                                    Navigator.pushNamed(
+                                        context, '/vendaFinalizada');
+                                  }
                                 }
                               }
                             }
@@ -373,7 +396,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                         'OK',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          color: Colors.white,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Arista-Pro-Bold-trial",
                         ),

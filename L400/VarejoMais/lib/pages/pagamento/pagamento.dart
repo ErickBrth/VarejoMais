@@ -20,10 +20,8 @@ class _PagamentoState extends State<Pagamento> {
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: ValueListenableBuilder(
           valueListenable: widget.pagamentoController.valorRestate,
           builder: (context, valor, child){

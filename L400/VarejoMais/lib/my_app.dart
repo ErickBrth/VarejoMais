@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:varejoMais/pages/Cancelamento/cancelamento.dart';
+import 'package:varejoMais/pages/Cancelamento/cancelamento_datapay.dart';
 import 'package:varejoMais/pages/HomePage/home_page.dart';
 import 'package:varejoMais/pages/Login/auth/auth.dart';
 import 'package:varejoMais/pages/Venda/venda_page.dart';

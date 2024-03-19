@@ -44,11 +44,13 @@ class DialogCancelamento {
                             Icon(
                               Icons.payments_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
                             Text(
                               'Rede',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",
@@ -78,11 +80,13 @@ class DialogCancelamento {
                             Icon(
                               Icons.monetization_on_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
                             Text(
                               'Datapay',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",

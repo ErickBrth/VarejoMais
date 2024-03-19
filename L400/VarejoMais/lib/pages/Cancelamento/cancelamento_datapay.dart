@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
 import 'package:varejoMais/data/models/pix_model.dart';
 import 'package:varejoMais/pages/HomePage/home_page.dart';
@@ -59,6 +61,7 @@ class _CancelamentoState extends State<Cancelamento> {
                           height: 20,
                         ),
                         Expanded(
+                          flex: 3,
                           child: ListView(
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
@@ -104,44 +107,44 @@ class _CancelamentoState extends State<Cancelamento> {
                                       fontSize: 20,
                                     )),
                               ),
+
                             ],
                           ),
                         ),
                             Flexible(
                               fit: FlexFit.loose,
-                              child: Container(
-                                alignment: AlignmentDirectional.center,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    refund = await pixController.refundPix();
-                                    final message = refund["message"];
-                                    final status = refund["status"];
-                                    await Future.delayed(const Duration(seconds: 1));
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  refund = await pixController.refundPix();
+                                  final message = refund["message"];
+                                  final status = refund["status"];
+                                  await Future.delayed(const Duration(seconds: 1));
+                                  showCustomSnackbar('$message');
+                                  if(status == "refund_pending"){
                                     showCustomSnackbar('$message');
-                                    if(status == "refund_pending"){
-                                      showCustomSnackbar('$message');
-                                      await Future.delayed(const Duration(seconds: 1));
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomePage()),
-                                            (route) => false,
-                                      );
-                                    }
-                                  },
-                                  style: const ButtonStyle(
-                                    padding: MaterialStatePropertyAll(EdgeInsetsDirectional.all(10)),
-                                    backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(248, 67, 21, 1.0)),
-                                  ),
-                                  child: const Text(
-                                    "Estornar Pagamento",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
+                                    await Future.delayed(const Duration(seconds: 1));
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()),
+                                          (route) => false,
+                                    );
+                                  }
+                                },
+                                style: const ButtonStyle(
+                                  padding: MaterialStatePropertyAll(EdgeInsetsDirectional.all(10)),
+                                  backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(248, 67, 21, 1.0)),
+                                ),
+                                child: const Text(
+                                  "Estornar Pagamento",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
                                   ),
                                 ),
                               ),
-                            ),
+                            )
+
                       ])),
                 );
               }

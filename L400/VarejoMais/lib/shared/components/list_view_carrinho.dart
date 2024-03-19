@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:varejoMais/data/controllers/carrinho_controller.dart';
 
@@ -16,8 +18,8 @@ class _ListCarrinhoState extends State<ListCarrinho> {
 
     return ListView.separated(
         separatorBuilder: (context, index) => Container(
-          height: 10,
-        ),
+              height: 15,
+            ),
         padding: const EdgeInsets.all(16),
         itemCount: carrinho.produtos.length,
         itemBuilder: (_, index) {
@@ -29,9 +31,17 @@ class _ListCarrinhoState extends State<ListCarrinho> {
             children: [
               ElevatedButton(
                 onPressed: () {},
-                style: const ButtonStyle(
-                  elevation: MaterialStatePropertyAll(10),
-                  backgroundColor: MaterialStatePropertyAll(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: const BorderSide(
+                          color: Colors.black,
+                          width: 1.0),// Define a borda aqui
+                    ),
+                  ),
+                  elevation: const MaterialStatePropertyAll(15),
+                  backgroundColor: const MaterialStatePropertyAll(
                     Colors.white,
                   ),
                 ),
@@ -40,13 +50,14 @@ class _ListCarrinhoState extends State<ListCarrinho> {
                   minVerticalPadding: 0,
                   leading: Image.network(
                     "https://datapaytecnologia.com.br/erp/sistema/images/produtos/${produto.imagem}",
+                    alignment: Alignment.topCenter,
                   ),
                   title: Row(
                     children: [
                       Expanded(
                         child: Container(
-                          // /padding: EdgeInsetsDirectional.only(top: 10),
-                          // color: Colors.blue,
+                          padding: EdgeInsetsDirectional.only(end: 0),
+                          width: 150,
                           child: Text(
                             "${produto.nome}",
                             textAlign: TextAlign.start,
@@ -68,12 +79,17 @@ class _ListCarrinhoState extends State<ListCarrinho> {
                               carrinho.removerProduto(produto);
                             });
                           },
-                          style: const ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              Color.fromRGBO(248, 67, 21, 1.0),
-                            ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(248, 67, 21, 1.0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            minimumSize: Size.zero,
                           ),
-                          child: const Text("Remover"),
+                          child: const Text(
+                            "Remover",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ],

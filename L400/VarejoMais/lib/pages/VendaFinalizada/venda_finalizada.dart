@@ -10,10 +10,8 @@ class VendaFinalizada extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final carrinho = Provider.of<CarrinhoController>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Material(
         child: SafeArea(
             child: Scaffold(

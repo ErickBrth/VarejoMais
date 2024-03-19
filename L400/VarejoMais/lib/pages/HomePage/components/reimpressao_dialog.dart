@@ -33,16 +33,22 @@ class DialogReimpressao {
                           Navigator.of(context).pop();
                           await platformChannel.reprint();
                         },
-                        style: const ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                                Color.fromRGBO(248, 67, 21, 1.0)),
-                            padding: MaterialStatePropertyAll(
+                        style:  ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            backgroundColor:
+                            const MaterialStatePropertyAll(Color.fromRGBO(248, 67, 21, 1.0)),
+                            padding: const MaterialStatePropertyAll(
                                 EdgeInsetsDirectional.zero)),
                         child: const Column(
                           children: [
                             Icon(
                               Icons.payments_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
                             // SizedBox(
                             //   width: 10,
@@ -51,6 +57,7 @@ class DialogReimpressao {
                               'Comprovante Rede',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",
@@ -68,22 +75,29 @@ class DialogReimpressao {
                         onPressed: () async {
 
                         },
-                        style: const ButtonStyle(
+                        style:  ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
                             backgroundColor:
-                                MaterialStatePropertyAll(Colors.blueAccent),
-                            padding: MaterialStatePropertyAll(
+                                const MaterialStatePropertyAll(Colors.blueAccent),
+                            padding: const MaterialStatePropertyAll(
                                 EdgeInsetsDirectional.zero)),
                         child: const Column(
                           children: [
                             Icon(
                               Icons.pix_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
 
                             Text(
                               'Comprovante Datapay',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",
