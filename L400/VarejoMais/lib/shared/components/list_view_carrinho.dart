@@ -49,7 +49,8 @@ class _ListCarrinhoState extends State<ListCarrinho> {
                   contentPadding: EdgeInsets.zero,
                   minVerticalPadding: 0,
                   leading: Image.network(
-                    "https://datapaytecnologia.com.br/erp/sistema/images/produtos/${produto.imagem}",
+                    "https://ovarejomais.com.br/erp/sistema/images/produtos/${produto.imagem}",
+                    width: 80,
                     alignment: Alignment.topCenter,
                   ),
                   title: Row(

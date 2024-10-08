@@ -37,10 +37,12 @@ class ProdutoRepository implements IProdutoRepository {
       final List<ProdutoModel> produtos = [];
 
       final body = jsonDecode(response.body);
-      body['resultado'].map((item) {
-        final ProdutoModel produto = ProdutoModel.fromMap(item);
-        produtos.add(produto);
-      }).toList();
+      if(body['resultado'] != "0"){
+        body['resultado'].map((item) {
+          final ProdutoModel produto = ProdutoModel.fromMap(item);
+          produtos.add(produto);
+        }).toList();
+      }
 
       return produtos;
     } else if (response.statusCode == 404) {

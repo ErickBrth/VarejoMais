@@ -43,22 +43,22 @@ class VendaFinalizada extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      // crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          padding: const EdgeInsetsDirectional.only(
-                              bottom: 35, end: 25),
-                          alignment: AlignmentDirectional.bottomCenter,
-                          child: FloatingActionButton(
-                            onPressed: () {},
-                            backgroundColor: Color.fromRGBO(248, 67, 21, 1.0),
-                            child: Icon(Icons.receipt_long_outlined),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.end,
+                    //   // crossAxisAlignment: CrossAxisAlignment.stretch,
+                    //   children: [
+                    //     Container(
+                    //       padding: const EdgeInsetsDirectional.only(
+                    //           bottom: 35, end: 25),
+                    //       alignment: AlignmentDirectional.bottomCenter,
+                    //       child: FloatingActionButton(
+                    //         onPressed: () {},
+                    //         backgroundColor: Color.fromRGBO(248, 67, 21, 1.0),
+                    //         child: Icon(Icons.receipt_long_outlined),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     InkWell(
                       onTap: () {
                         carrinho.produtos.clear();

@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.example.varejo_mais"
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -89,6 +89,11 @@ android {
             versionNameSuffix '-Gpos700'
             applicationIdSuffix = ".gpos700"
             signingConfig signingConfigs.gpos700
+//            sourceSets {
+//                main {
+//                    jniLibs.srcDirs = ['libs/sdk_3.0_release.aar']
+//                }
+//            }
         }
 
         l400 {
@@ -97,6 +102,11 @@ android {
             versionNameSuffix "-L400"
             applicationIdSuffix = ".l400"
             signingConfig signingConfigs.debug
+//            sourceSets {
+//                main {
+//                    jniLibs.srcDirs = ['libs/smartrede-sdk-l400-4.0.6.release.aar']
+//                }
+//            }
         }
     }
 
@@ -128,7 +138,9 @@ repositories {
 
 dependencies{
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
+//    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    gpos700Implementation fileTree(dir: 'libs/sdk3.0', include: ['*.jar', '*.aar'])
+    l400Implementation fileTree(dir: 'libs/sdk4.0', include: ['*.jar', '*.aar'])
 
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'

@@ -83,7 +83,6 @@ class _VendaPageState extends State<VendaPage> {
                               ],
                             );
                           }
-
                           if (store.erro.value.isNotEmpty) {
                             return Column(
                               mainAxisSize: MainAxisSize.min,
@@ -92,9 +91,9 @@ class _VendaPageState extends State<VendaPage> {
                                   child: Container(
                                     alignment: AlignmentDirectional.center,
                                     height: MediaQuery.of(context).size.height,
-                                    child: Text(
-                                      store.erro.value,
-                                      style: const TextStyle(
+                                    child: const Text(
+                                      "Erro ao exibir os produtos",
+                                      style: TextStyle(
                                         color: Colors.black54,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20,
@@ -108,16 +107,25 @@ class _VendaPageState extends State<VendaPage> {
                           }
 
                           if (store.state.value.isEmpty) {
-                            return const Center(
-                              child: Text(
-                                'Nenhum item na lista',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Container(
+                                    alignment: AlignmentDirectional.center,
+                                    height: MediaQuery.of(context).size.height,
+                                    child: const Text(
+                                      "Nenhum produto cadastrado",
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
+                              ],
                             );
                           } else {
                             return Center(

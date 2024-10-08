@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class Reimpressao extends StatelessWidget{
@@ -13,7 +12,7 @@ class Reimpressao extends StatelessWidget{
               child: Column(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset('assets/images/logo.png'),
-                    Text('Reimpressao'),
+                    const Text('Reimpressao'),
                   ]
               )
           ),
@@ -21,5 +20,4 @@ class Reimpressao extends StatelessWidget{
       ),
     );
   }
-
 }

@@ -103,7 +103,7 @@ class _ProdutosGridviewState extends State<ProdutosGridview> {
                           children: [
                             Expanded(
                               child: Image.network(
-                                "https://datapaytecnologia.com.br/erp/sistema/images/produtos/${item
+                                "https://ovarejomais.com.br/erp/sistema/images/produtos/${item
                                     .imagem}",
                                 height: 75,
                                 width: 75,

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:varejoMais/data/repositories/produto_repository.dart';
 import 'package:varejoMais/data/http/exceptions.dart';
@@ -22,6 +24,7 @@ class ProdutoStore {
     isLoading.value = true;
     try {
       final result = await repository.getProdutos();
+
       state.value = result;
     } on NotFoundException catch (e) {
       erro.value = e.message;

@@ -5,7 +5,6 @@ import 'package:varejoMais/data/controllers/carrinho_controller.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
 import 'package:varejoMais/data/models/produto_model.dart';
-import 'package:varejoMais/pages/pagamento/pagamento.dart';
 import 'package:varejoMais/pages/pagamento/pix/alert_dialog_pix.dart';
 import 'package:varejoMais/shared/components/pagamento_button.dart';
 import 'package:varejoMais/shared/components/show_dialog_price/dialog_price.dart';
@@ -306,10 +305,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                   },
                   onChanged: (value) {
                     int newParcelas = int.tryParse(value) ?? 0;
-                    if (newParcelas <= 0) {
-                    } else {
-                      parcelas = newParcelas;
-                    }
+                    parcelas = newParcelas;
                   },
                 ),
               ),
@@ -361,10 +357,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                             String result = "";
                             if (valorAPagar > 0.0) {
                               result = await platformChannel.creditoParcelado(valorAPagar, parcelas);
-                              // Navigator.of(context).pop();
-                              // Navigator.of(context).pop();
                               if (result == "ok!") {
-                                await widget.pagamentoController.registraPagamento("PIX REDE", produtosCarrinho, valorAPagar);
+                                await widget.pagamentoController.registraPagamento("CARTAO PARCELADO", produtosCarrinho, valorAPagar);
                                 double valorRestante = double.parse(widget
                                     .pagamentoController.valorRestate.value
                                     .toStringAsFixed(2));
@@ -379,8 +373,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                                 }
                                 if (valorRestante == 0.0) {
                                   if(mounted){
-                                    Navigator.pushNamed(
-                                        context, '/vendaFinalizada');
+                                    vendaFinalizada();
                                   }
                                 }
                               }

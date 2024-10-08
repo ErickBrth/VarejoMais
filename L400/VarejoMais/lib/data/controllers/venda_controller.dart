@@ -17,7 +17,6 @@ class VendaController {
 
     final Map<String, dynamic> requestBody = {
       "client_id": clientId,
-
     };
 
     final response = await http.post(

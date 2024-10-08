@@ -46,8 +46,13 @@ class Login{
 
         idUsuario = data['result'][0]['id'].toString(); //id do usuario
         idEmpresa = data['result'][0]['empresa'].toString();
-        await storeToken(idUsuario);
-        await storeIdEmpresa(idEmpresa);
+
+        ///perguntar se ao cancelar uma venda, quando digitar usuario e senha, automaticamente ja loga com o usuario ou faz somente uma autenticação
+        // bool logado = await verifyToken(); //todo
+        // if(logado == false){
+          await storeToken(idUsuario);
+          await storeIdEmpresa(idEmpresa);
+        // }
         return true;
       } else {
         return false;

@@ -1,12 +1,12 @@
 package com.example.varejo_mais;
 
 
-import br.com.positivo.api.cipurse.Cipurse;
-import br.com.positivo.api.installer.Installer;
-import br.com.positivo.api.mifare.Mifare;
-import br.com.positivo.api.network.Network;
-import br.com.positivo.api.settings.Settings;
-import br.com.positivo.lib.provider.PositivoDeviceProvider;
+//import br.com.positivo.api.cipurse.Cipurse;
+//import br.com.positivo.api.installer.Installer;
+//import br.com.positivo.api.mifare.Mifare;
+//import br.com.positivo.api.network.Network;
+//import br.com.positivo.api.settings.Settings;
+//import br.com.positivo.lib.provider.PositivoDeviceProvider;
 import io.flutter.embedding.android.FlutterActivity;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -60,33 +60,33 @@ public class MainActivity extends FlutterActivity {
 
     FlexTipoPagamento flexTipoPagamento;
 
-    PositivoDeviceProvider positivoDeviceProvider = new PositivoDeviceProvider();
-    Cipurse cipurse;
-    Installer installer;
-    Mifare mifare;
-    Network mNetwork;
-    Settings mSettings;
+//    PositivoDeviceProvider positivoDeviceProvider = new PositivoDeviceProvider();
+//    Cipurse cipurse;
+//    Installer installer;
+//    Mifare mifare;
+//    Network mNetwork;
+//    Settings mSettings;
 
-    public void initialize(Context context) {
-        if (context != null) {
-            mifare = positivoDeviceProvider.getMifare(context);
-            installer = positivoDeviceProvider.getInstaller(context);
-            cipurse =  positivoDeviceProvider.getCipurse(context);
-            if (cipurse != null) {
-                mNetwork = positivoDeviceProvider.getNetwork(context);
-                mSettings = positivoDeviceProvider.getSettings(context);
-                if (mNetwork != null) {
-//                    String[] imeiNumbers = mNetwork.getIMEINumber();
-//                    if (imeiNumbers != null && imeiNumbers.length > 0) {
-//                        String[] imei = imeiNumbers; // IMEI
-//                    }
-                }
-                if (mSettings != null) {
-                   // String serialNumber = mSettings.serialNumberDevice(); // Número de série
-                }
-            }
-        }
-    }
+//    public void initialize(Context context) {
+//        if (context != null) {
+//            mifare = positivoDeviceProvider.getMifare(context);
+//            installer = positivoDeviceProvider.getInstaller(context);
+//            cipurse =  positivoDeviceProvider.getCipurse(context);
+//            if (cipurse != null) {
+//                mNetwork = positivoDeviceProvider.getNetwork(context);
+//                mSettings = positivoDeviceProvider.getSettings(context);
+//                if (mNetwork != null) {
+////                    String[] imeiNumbers = mNetwork.getIMEINumber();
+////                    if (imeiNumbers != null && imeiNumbers.length > 0) {
+////                        String[] imei = imeiNumbers; // IMEI
+////                    }
+//                }
+//                if (mSettings != null) {
+//                   // String serialNumber = mSettings.serialNumberDevice(); // Número de série
+//                }
+//            }
+//        }
+//    }
 
 
 
@@ -447,6 +447,10 @@ public class MainActivity extends FlutterActivity {
 
             case(REQ_CODE_REVERSAL):
                 if(resultCode==Activity.RESULT_OK) {
+                    String paymentStatus = "canceled";
+                    if (paymentStatusCallback != null) {
+                        paymentStatusCallback.onPaymentStatusReceived(paymentStatus);
+                    }
                     s = "Estorno de pagamento\n" + getPaymentStatus(data);
                     Toast.makeText(this, s, LENGTH_LONG).show();
                 } else {
