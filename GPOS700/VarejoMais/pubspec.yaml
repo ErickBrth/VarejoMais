@@ -72,7 +72,9 @@ flutter:
     - assets/images/DataPayLogo.png
     - assets/images/logoSmall.png
     - assets/images/product_logo.jpg
+    - assets/images/zapLogo.png
     - assets/ca/isrgrootx1.pem
+    - assets/ca/certificadoDataPay.crt
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

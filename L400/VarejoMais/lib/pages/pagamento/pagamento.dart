@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
-import 'package:varejoMais/shared/components/app_bar.dart';
+import 'package:varejoMais/pages/Venda/components/app_bar_pagamentos.dart';
 import 'package:varejoMais/shared/components/bottom_button.dart';
 import 'package:varejoMais/pages/pagamento/components/pagamento_button_grid.dart';
 
@@ -11,30 +11,30 @@ class Pagamento extends StatefulWidget {
   final double totalCompra;
   final PagamentoController pagamentoController;
 
-
   @override
   State<Pagamento> createState() => _PagamentoState();
 }
 
 class _PagamentoState extends State<Pagamento> {
+  bool voltar = true;
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: ValueListenableBuilder(
           valueListenable: widget.pagamentoController.valorRestate,
           builder: (context, valor, child){
+            if(valor != widget.totalCompra){
+                voltar = false;
+            }
             return Scaffold(
               resizeToAvoidBottomInset: false,
-              appBar: const PreferredSize(
-                  preferredSize: Size.fromHeight(70),
-                  child: App_Bar(
-                    title: "Pagamentos",
-                    leading: Icon(Icons.arrow_back),
-                  )
+              appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(70),
+                  child: AppBarPagamento(
+                      leading: const Icon(Icons.arrow_back),
+                      title: "Pagamentos", voltar: voltar,)
               ),
               body: Material(
                 child: Column(
@@ -132,9 +132,6 @@ class _PagamentoState extends State<Pagamento> {
       ),
     );
   }
-  // void atualizarValor(double novoValor) {
-  //   pagamentoController.setValorRestante(novoValor);
-  // }
 }
 
 

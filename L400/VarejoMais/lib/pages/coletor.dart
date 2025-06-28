@@ -13,7 +13,7 @@ class Coletor extends StatelessWidget{
               child: Column(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset('assets/images/logo.png'),
-                    Text('Coletor'),
+                    const Text('Coletor'),
                   ]
               )
           ),

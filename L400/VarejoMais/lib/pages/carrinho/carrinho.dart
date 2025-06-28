@@ -22,7 +22,6 @@ class _CarrinhoState extends State<Carrinho> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pagamentoController.valorRestate.addListener(() {
       setState(() {
@@ -34,10 +33,8 @@ class _CarrinhoState extends State<Carrinho> {
   Widget build(BuildContext context) {
     final carrinho = Provider.of<CarrinhoController>(context);
     var total = carrinho.calcularTotal();
-    return WillPopScope(
-      onWillPop: () async{
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(70),
@@ -57,7 +54,7 @@ class _CarrinhoState extends State<Carrinho> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
-                    height: 35,
+                    height: 40,
                     alignment: AlignmentDirectional.bottomEnd,
                     child: const Text(
                       "SUB TOTAL ",

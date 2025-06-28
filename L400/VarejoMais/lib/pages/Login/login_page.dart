@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:varejoMais/pages/HomePage/home_page.dart';
 import 'package:varejoMais/pages/Login/login/login.dart';
 
 class LoginPage extends StatefulWidget {
@@ -70,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   //password
                   TextFormField(
                     controller: passwordController,
-                    keyboardType: const TextInputType.numberWithOptions(),
+                    keyboardType: TextInputType.text,
                     obscureText: true,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -106,7 +104,11 @@ class _LoginPageState extends State<LoginPage> {
                       style: const ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
                               Color.fromRGBO(248, 67, 21, 1.0))),
-                      child: const Text("Entrar")),
+                      child: const Text(
+                          "Entrar",
+                        style: TextStyle(color: Colors.white,fontSize: 20),
+                      )
+                  ),
                 ]),
               ),
             ),

@@ -1,9 +1,8 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varejoMais/pages/HomePage/components/cancelamento_dialog.dart';
+import 'package:varejoMais/pages/HomePage/home_page.dart';
 
 import '../login/login.dart';
 
@@ -57,7 +56,7 @@ class AuthPage extends StatelessWidget {
                       //password
                       TextFormField(
                         controller: passwordController,
-                        keyboardType: const TextInputType.numberWithOptions(),
+                        keyboardType: TextInputType.text,
                         obscureText: true,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -82,7 +81,12 @@ class AuthPage extends StatelessWidget {
                                 currentFocus.unfocus();
                               }
                               if (loginState) {
-                                Navigator.of(context).pushReplacementNamed('/home');
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()),
+                                      (route) => false,
+                                );
                                 DialogCancelamento().showCancelamentoDialog(context);
                               } else {
                                 passwordController.clear();
@@ -94,7 +98,11 @@ class AuthPage extends StatelessWidget {
                           style: const ButtonStyle(
                               backgroundColor: MaterialStatePropertyAll(
                                   Color.fromRGBO(248, 67, 21, 1.0))),
-                          child: const Text("Entrar")),
+                          child: const Text(
+                              "Entrar",
+                            style: TextStyle(color: Colors.white,fontSize: 20),
+                          )
+                      ),
                     ]),
               ),
             ),

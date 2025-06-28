@@ -19,7 +19,7 @@ class ProdutoRepository implements IProdutoRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? idEmpresa = prefs.getString('idEmpresa');
     String apiUrl =
-        'http://datapaytecnologia.com.br/erp/apiErp/produtos/listar.php';
+        'https://ovarejomais.com.br/erp/apiErp/produtos/listar.php';
 
     final Map<String, dynamic?> requestBody = {
       'empresa': idEmpresa,
@@ -37,16 +37,18 @@ class ProdutoRepository implements IProdutoRepository {
       final List<ProdutoModel> produtos = [];
 
       final body = jsonDecode(response.body);
-      body['resultado'].map((item) {
-        final ProdutoModel produto = ProdutoModel.fromMap(item);
-        produtos.add(produto);
-      }).toList();
+      if(body['resultado'] != "0"){
+        body['resultado'].map((item) {
+          final ProdutoModel produto = ProdutoModel.fromMap(item);
+          produtos.add(produto);
+        }).toList();
+      }
 
       return produtos;
     } else if (response.statusCode == 404) {
       throw NotFoundException("A url informada não é válida");
     } else {
-      throw Exception("Não foi possível carregar os produtos");
+      throw NotFoundException("Não foi possível carregar os produtos");
     }
   }
 }

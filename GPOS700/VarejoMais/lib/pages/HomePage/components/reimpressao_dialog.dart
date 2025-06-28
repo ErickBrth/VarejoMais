@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
 
+import '../../../shared/platform_channel/platform_channel.dart';
+
 class DialogReimpressao {
   final platformChannel = PlatformChannel();
-
-  //final PixController pixController = PixController();
 
   Future<void> showReimpressaoDialog(BuildContext context) async {
     await showDialog(

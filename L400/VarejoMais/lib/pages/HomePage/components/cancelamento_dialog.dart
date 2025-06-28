@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
 
-import '../../../data/controllers/pixController.dart';
-
 class DialogCancelamento {
   final platformChannel = PlatformChannel();
 
@@ -46,11 +44,13 @@ class DialogCancelamento {
                             Icon(
                               Icons.payments_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
                             Text(
                               'Rede',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",
@@ -68,7 +68,6 @@ class DialogCancelamento {
                         onPressed: () async {
                           Navigator.of(context).pop();
                           Navigator.of(context).pushNamed('/cancelamento');
-
                         },
                         style: const ButtonStyle(
                             backgroundColor:
@@ -81,11 +80,13 @@ class DialogCancelamento {
                             Icon(
                               Icons.monetization_on_outlined,
                               size: 45,
+                              color: Colors.white,
                             ),
                             Text(
                               'Datapay',
                               textAlign: TextAlign.center,
                               style: TextStyle(
+                                color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
                                 fontFamily: "Arista-Pro-Bold-trial",

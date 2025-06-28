@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:varejoMais/data/controllers/carrinho_controller.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
-import 'package:varejoMais/pages/pagamento/components/alert_dialog_pix.dart';
+import 'package:varejoMais/data/models/produto_model.dart';
+import 'package:varejoMais/pages/pagamento/pix/alert_dialog_pix.dart';
 import 'package:varejoMais/shared/components/pagamento_button.dart';
 import 'package:varejoMais/shared/components/show_dialog_price/dialog_price.dart';
 import 'package:varejoMais/shared/platform_channel/platform_channel.dart';
@@ -12,7 +16,6 @@ class ButtonGrid extends StatefulWidget {
 
   final double totalVenda;
   final PagamentoController pagamentoController;
-
   @override
   State<ButtonGrid> createState() => _ButtonGridState();
 }
@@ -26,13 +29,24 @@ class _ButtonGridState extends State<ButtonGrid> {
   double valorTotalPago = 0.0;
   PixController pixController = PixController();
 
+  late NavigatorState _navigator;
+
+  @override
+  void didChangeDependencies() {
+  super.didChangeDependencies();
+  _navigator = Navigator.of(context);
+  }
+
+  void vendaFinalizada() {
+  _navigator.pushReplacementNamed('/vendaFinalizada');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    final produtosCarrinho = Provider.of<CarrinhoController>(context).produtos;
+    return PopScope(
       //impede de voltar a pagina com o botão do android
-      onWillPop: () async {
-        return false;
-      },
+      canPop: false,
       child: ValueListenableBuilder(
           valueListenable: widget.pagamentoController.valorRestate,
           builder: (context, valor, child) {
@@ -52,7 +66,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                   label: "Cartão Crédito",
                   onPressed: () {
                     setState(() {
-                      mostrarAlertDialog(valor);
+                      mostrarAlertDialog(valor, produtosCarrinho);
                     });
                   },
                 ),
@@ -67,17 +81,19 @@ class _ButtonGridState extends State<ButtonGrid> {
                     if (valorAPagar > 0.0) {
                       result = await platformChannel.debito(valorAPagar);
                       if (result == "ok!") {
-                        double valorRestante = double.parse(widget
-                            .pagamentoController.valorRestate.value
-                            .toStringAsFixed(2));
-                        widget.pagamentoController
-                            .calculaValorRestante(valorAPagar, valorRestante);
-                        valorRestante = double.parse(widget
-                            .pagamentoController.valorRestate.value
-                            .toStringAsFixed(2));
-                        if (valorRestante == 0.0) {
-                          Navigator.pushReplacementNamed(
-                              context, '/vendaFinalizada');
+                        String retorno = await widget.pagamentoController.registraPagamento("DEBITO", produtosCarrinho, valorAPagar);
+                        if(retorno == "ok!"){
+                          double valorRestante = double.parse(widget
+                              .pagamentoController.valorRestate.value
+                              .toStringAsFixed(2));
+                          widget.pagamentoController
+                              .calculaValorRestante(valorAPagar, valorRestante);
+                          valorRestante = double.parse(widget
+                              .pagamentoController.valorRestate.value
+                              .toStringAsFixed(2));
+                          if (valorRestante == 0.0) {
+                            vendaFinalizada();
+                          }
                         }
                       }
                     }
@@ -86,8 +102,28 @@ class _ButtonGridState extends State<ButtonGrid> {
                 PagamentoButton(
                   icon: Icons.monetization_on_outlined,
                   label: "Dinheiro",
-                  onPressed: () {
-
+                  onPressed: () async {
+                    valorAPagar =
+                        (await DialogPrice().showInputDialog(context, valor))!;
+                    valorTotalPago = valor;
+                    String result = "";
+                    if (valorAPagar > 0.0) {
+                    result = await widget.pagamentoController.registraPagamento("DINHEIRO", produtosCarrinho, valorAPagar);
+                    if (result == "ok!") {
+                    double valorRestante = double.parse(widget
+                        .pagamentoController.valorRestate.value
+                        .toStringAsFixed(2));
+                    widget.pagamentoController
+                        .calculaValorRestante(valorAPagar, valorRestante);
+                    valorRestante = double.parse(widget
+                        .pagamentoController.valorRestate.value
+                        .toStringAsFixed(2));
+                    if (valorRestante == 0.0) {
+                    Navigator.pushReplacementNamed(
+                    context, '/vendaFinalizada');
+                    }
+                    }
+                    }
                   },
                 ),
                 PagamentoButton(
@@ -100,7 +136,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                         valorAPagar,
                         valorTotalPago,
                         widget.pagamentoController,
-                        widget.totalVenda);
+                        widget.totalVenda, produtosCarrinho);
                   },
                 ),
               ],
@@ -109,7 +145,7 @@ class _ButtonGridState extends State<ButtonGrid> {
     );
   }
 
-  void mostrarAlertDialog(double valor) {
+  void mostrarAlertDialog(double valor, Map<ProdutoModel, int> produtosCarrinho) {
     showDialog(
       context: context,
       builder: (context) {
@@ -129,7 +165,7 @@ class _ButtonGridState extends State<ButtonGrid> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: ElevatedButton(
                       onPressed: () async {
                         valorAPagar =
@@ -140,6 +176,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                           result = await platformChannel.creditoVista(valorAPagar);
                           Navigator.of(context).pop();
                           if (result == "ok!") {
+                            await widget.pagamentoController.registraPagamento("CREDITO AVISTA", produtosCarrinho, valorAPagar);
                             double valorRestante = double.parse(widget
                                 .pagamentoController.valorRestate.value
                                 .toStringAsFixed(2));
@@ -149,21 +186,26 @@ class _ButtonGridState extends State<ButtonGrid> {
                                 .pagamentoController.valorRestate.value
                                 .toStringAsFixed(2));
                             if (valorRestante == 0.0) {
-                              Navigator.pushReplacementNamed(
-                                  context, '/vendaFinalizada');
+                                vendaFinalizada();
                             }
                           }
                         }
                       },
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                      style: ButtonStyle(
+                        backgroundColor: const MaterialStatePropertyAll(
                             Color.fromRGBO(248, 67, 21, 1.0)),
-                      ),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          )
+                        ),
+                      ), 
                       child: const Column(
                         children: [
                           Icon(
                             Icons.payments_outlined,
                             size: 45,
+                            color: Colors.white,
                           ),
                           SizedBox(
                             width: 10,
@@ -172,7 +214,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                             'À Vista',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
+                              color: Colors.white,
                               fontWeight: FontWeight.w800,
                               fontFamily: "Arista-Pro-Bold-trial",
                             ),
@@ -182,7 +225,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                     ),
                   ),
                   const SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   Expanded(
                     child: ElevatedButton(
@@ -190,17 +233,24 @@ class _ButtonGridState extends State<ButtonGrid> {
                         setState(() {
                           //Navigator.of(context).pop();
                           digitarNumeroParcelas(
-                              widget.totalVenda, parcelas, valor);
+                              widget.totalVenda, parcelas, valor, produtosCarrinho);
                         });
                       },
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                        backgroundColor: const MaterialStatePropertyAll(
                             Color.fromRGBO(248, 67, 21, 1.0)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)
+                            )
+                        ),
                       ),
                       child: const Column(
                         children: [
                           Icon(
                             Icons.credit_card_rounded,
+                            color: Colors.white,
                             size: 45,
                           ),
                           SizedBox(
@@ -208,9 +258,11 @@ class _ButtonGridState extends State<ButtonGrid> {
                           ),
                           Text(
                             'Parcelado',
+                            softWrap: false,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
+                              color: Colors.white,
+                              fontSize: 16,
                               fontWeight: FontWeight.w800,
                               fontFamily: "Arista-Pro-Bold-trial",
                             ),
@@ -228,7 +280,7 @@ class _ButtonGridState extends State<ButtonGrid> {
     );
   }
 
-  void digitarNumeroParcelas(double totalVenda, int parcelas, double valor) {
+  void digitarNumeroParcelas(double totalVenda, int parcelas, double valor, Map<ProdutoModel, int> produtosCarrinho) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -253,10 +305,7 @@ class _ButtonGridState extends State<ButtonGrid> {
                   },
                   onChanged: (value) {
                     int newParcelas = int.tryParse(value) ?? 0;
-                    if (newParcelas <= 0) {
-                    } else {
-                      parcelas = newParcelas;
-                    }
+                    parcelas = newParcelas;
                   },
                 ),
               ),
@@ -279,7 +328,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                         'Cancelar',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          color: Colors.white,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Arista-Pro-Bold-trial",
                         ),
@@ -307,9 +357,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                             String result = "";
                             if (valorAPagar > 0.0) {
                               result = await platformChannel.creditoParcelado(valorAPagar, parcelas);
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
                               if (result == "ok!") {
+                                await widget.pagamentoController.registraPagamento("CARTAO PARCELADO", produtosCarrinho, valorAPagar);
                                 double valorRestante = double.parse(widget
                                     .pagamentoController.valorRestate.value
                                     .toStringAsFixed(2));
@@ -318,9 +367,14 @@ class _ButtonGridState extends State<ButtonGrid> {
                                 valorRestante = double.parse(widget
                                     .pagamentoController.valorRestate.value
                                     .toStringAsFixed(2));
+                                if(mounted){
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                }
                                 if (valorRestante == 0.0) {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/vendaFinalizada');
+                                  if(mounted){
+                                    vendaFinalizada();
+                                  }
                                 }
                               }
                             }
@@ -335,7 +389,8 @@ class _ButtonGridState extends State<ButtonGrid> {
                         'OK',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          color: Colors.white,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           fontFamily: "Arista-Pro-Bold-trial",
                         ),

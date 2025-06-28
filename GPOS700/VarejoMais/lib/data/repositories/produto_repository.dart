@@ -19,7 +19,7 @@ class ProdutoRepository implements IProdutoRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? idEmpresa = prefs.getString('idEmpresa');
     String apiUrl =
-        'http://datapaytecnologia.com.br/erp/apiErp/produtos/listar.php';
+        'https://datapaytecnologia.com.br/erp/apiErp/produtos/listar.php';
 
     final Map<String, dynamic?> requestBody = {
       'empresa': idEmpresa,

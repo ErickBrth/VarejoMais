@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class Estoque extends StatelessWidget{
@@ -13,7 +12,7 @@ class Estoque extends StatelessWidget{
               child: Column(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset('assets/images/logo.png'),
-                    Text('Estoque'),
+                    const Text('Estoque'),
                   ]
               )
           ),
@@ -21,5 +20,4 @@ class Estoque extends StatelessWidget{
       ),
     );
   }
-
 }

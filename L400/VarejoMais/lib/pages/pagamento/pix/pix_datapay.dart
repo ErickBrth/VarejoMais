@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:varejoMais/data/controllers/pagamento_controller.dart';
 import 'package:varejoMais/data/controllers/pixController.dart';
+import 'package:varejoMais/data/models/produto_model.dart';
 import 'package:varejoMais/shared/components/loading.dart';
 
 
 class QrCodePix extends StatefulWidget {
-  const QrCodePix({super.key, required this.valorAPagar, required this.pagamentoController, required this.pixController, required this.valorTotalPago});
+  const QrCodePix({super.key, required this.valorAPagar, required this.pagamentoController, required this.pixController, required this.valorTotalPago, required this.itens});
   final double valorAPagar;
-
+  final Map<ProdutoModel, int> itens;
   final double valorTotalPago;
   final PagamentoController pagamentoController;
   final PixController pixController;
@@ -34,8 +35,10 @@ class _QrCodePixState extends State<QrCodePix> {
       widget.pixController.pixStatus.addListener(() {
          String pixStatus = widget.pixController.getPixStatus;
         if (pixStatus == 'approved') {
+          registraPagamento();
           widget.pagamentoController.calculaValorRestante(widget.valorAPagar, widget.valorTotalPago);
           double valorRestante = widget.pagamentoController.getValorRestante;
+
           if(valorRestante == 0){
             Navigator.pushNamed(context, "/vendaFinalizada");
           }else{
@@ -118,6 +121,10 @@ class _QrCodePixState extends State<QrCodePix> {
     Future<Image> _getQrCodePix() async {
     Image image = await widget.pixController.getQrCodePix(widget.valorAPagar.toStringAsFixed(2));
      return image;
+    }
+
+    Future<String> registraPagamento() async{
+      return await widget.pagamentoController.registraPagamento("PIX DATAPAY", widget.itens, widget.valorAPagar);
     }
   }
 
